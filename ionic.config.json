@@ -1,0 +1,7 @@
+{
+  "name": "savey",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

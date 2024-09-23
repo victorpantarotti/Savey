@@ -8,7 +8,7 @@ interface PreferencesContextInterface {
     user: string,
     setUser: React.Dispatch<SetStateAction<string>>,
     theme: string,
-    changeTheme: () => void
+    setTheme: React.Dispatch<SetStateAction<string>>
 }
 
 export const PreferencesContext = createContext<PreferencesContextInterface>({} as PreferencesContextInterface);
@@ -29,14 +29,6 @@ export const PreferencesProvider = ({ children }: PreferencesProviderProps) => {
     const [user, setUser] = useState("vh"); 
     const [theme, setTheme] = useState(getTheme);
 
-    function changeTheme() {
-        if (theme === "dark") {
-          setTheme("light");
-        } else {
-          setTheme("dark");
-        }
-    }
-
     useEffect(() => {
         const refreshTheme = () => {
             localStorage.setItem("theme", theme);
@@ -46,7 +38,7 @@ export const PreferencesProvider = ({ children }: PreferencesProviderProps) => {
     }, [theme]);
 
     return (
-        <PreferencesContext.Provider value={{ user, setUser, theme, changeTheme }}>
+        <PreferencesContext.Provider value={{ user, setUser, theme, setTheme }}>
             {children}
         </PreferencesContext.Provider>
     );

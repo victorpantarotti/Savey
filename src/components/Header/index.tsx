@@ -1,13 +1,12 @@
 import type { MenuProps } from 'antd';
-import { Space, Dropdown } from "antd";
+import { Space, Dropdown, ConfigProvider } from "antd";
 import { CgMenu, CgMathPlus  } from "react-icons/cg";
-
-import './Dropdown.css';
-import styles from "./Header.module.css";
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
 
+import styles from "./Header.module.css";
+
 const Header = () => {
-  const { changeTheme } = usePreferencesContext();
+  const { theme, changeTheme } = usePreferencesContext();
 
   const items: MenuProps['items'] = [
     {
@@ -24,7 +23,12 @@ const Header = () => {
     {
       key: '2',
       label: (
-        <h3>nothing</h3>
+        <a onClick={(e) => {
+          e.preventDefault();
+          changeTheme();
+        }}>
+          Trocar usuário
+        </a>
       ),
     }
   ];
@@ -37,9 +41,16 @@ const Header = () => {
           <li>
             <Space direction="vertical">
                 <Space wrap>
-                    <Dropdown menu={{ items }} placement="bottomLeft">
+                  <ConfigProvider theme={{
+                    token: {
+                      colorBgElevated: "var(--backgroundColor)",
+                      colorText: "var(--textColor)"
+                    }
+                  }}>
+                    <Dropdown menu={{ items }} placement="bottomLeft" className={`${theme}-theme`}>
                         <CgMenu size={28} fontWeight={12} />
                     </Dropdown>
+                  </ConfigProvider>
                 </Space>
             </Space>
           </li>

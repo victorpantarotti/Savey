@@ -1,15 +1,25 @@
+import GlobalStyle from './components/GlobalStyle';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
-import './App.css';
-import { usePreferencesContext } from './hooks/usePreferencesContext';
+import styled from 'styled-components';
+
+const AppDiv = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: var(--backgroundColor);
+  color: var(--textColor);
+`;
 
 function App() {
-  const { theme } = usePreferencesContext();
-
   return (
-    <div className={`app ${theme}-theme`}>
-      <Header />
-    </div>
+    <>
+      <AppDiv>
+        <GlobalStyle />
+        <Header />
+        <Footer />
+      </AppDiv>
+    </>
   );
 }
 

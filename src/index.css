@@ -1,9 +1,0 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
-@font-face {
-  font-family: 'Amsterdam Two';
-  src: url('/amsterdam-two.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-body { font-family: "Sora"; }

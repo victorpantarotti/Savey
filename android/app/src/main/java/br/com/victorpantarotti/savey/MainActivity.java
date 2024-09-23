@@ -1,4 +1,4 @@
-package com.savey;
+package br.com.victorpantarotti.savey;
 
 import com.getcapacitor.BridgeActivity;
 

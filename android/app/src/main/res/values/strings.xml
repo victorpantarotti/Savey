@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">savey</string>
-    <string name="title_activity_main">savey</string>
-    <string name="package_name">com.savey</string>
-    <string name="custom_url_scheme">com.savey</string>
+    <string name="app_name">Savey</string>
+    <string name="title_activity_main">Savey</string>
+    <string name="package_name">br.com.victorpantarotti.savey</string>
+    <string name="custom_url_scheme">br.com.victorpantarotti.savey</string>
 </resources>

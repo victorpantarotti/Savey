@@ -1,6 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 
+import Sora from "./fonts/Sora.ttf";
+import AmsterdamTwo from "./fonts/amsterdam-two.ttf";
+
 import './normalize.css';
 
 const GlobalStyle = () => {
@@ -20,10 +23,16 @@ const GlobalStyle = () => {
     const currentTheme = themeStyles[theme as keyof object];
 
     const Styled = createGlobalStyle`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
         @font-face {
-            font-family: 'Amsterdam Two';
-            src: url('/amsterdam-two.ttf') format('truetype');
+            font-family: "Sora";
+            src: local("Sora"), url(${Sora}), format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "Amsterdam Two";
+            src: local("Amsterdam Two"), local("AmsterdamTwo"), url(${AmsterdamTwo}), format("truetype");
             font-weight: normal;
             font-style: normal;
         }

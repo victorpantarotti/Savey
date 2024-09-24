@@ -1,9 +1,10 @@
 import type { MenuProps } from 'antd';
 import { Space, Dropdown, ConfigProvider } from "antd";
-import { CgMenu, CgMathPlus  } from "react-icons/cg";
+import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile } from "react-icons/cg";
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
 
 import styles from "./Header.module.css";
+import DropdownButton from './DropdownButton';
 
 const Header = () => {
   const { theme, changeTheme } = usePreferencesContext();
@@ -12,23 +13,13 @@ const Header = () => {
     {
       key: '1',
       label: (
-        <a onClick={(e) => {
-          e.preventDefault();
-          changeTheme();
-        }}>
-          Mudar tema
-        </a>
+        <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
       ),
     },
     {
       key: '2',
       label: (
-        <a onClick={(e) => {
-          e.preventDefault();
-          changeTheme();
-        }}>
-          Trocar usuário
-        </a>
+        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => {}} />
       ),
     }
   ];

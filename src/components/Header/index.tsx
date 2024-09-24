@@ -1,27 +1,36 @@
 import type { MenuProps } from 'antd';
 import { Space, Dropdown, ConfigProvider } from "antd";
-import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile } from "react-icons/cg";
+import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile, CgHeart } from "react-icons/cg";
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
 
 import styles from "./Header.module.css";
 import DropdownButton from './DropdownButton';
 
 const Header = () => {
-  const { theme, changeTheme } = usePreferencesContext();
+  const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
 
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
-        <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
+        <DropdownButton icon={<CgHeart />} text="Favoritos" onClick={() => {}} />
       ),
     },
     {
       key: '2',
       label: (
-        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => {}} />
+        <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
       ),
-    }
+    },
+    {
+      key: '3',
+      label: (
+        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => setLoginModalState({
+          active: true,
+          closable: true
+        })} />
+      ),
+    },
   ];
 
   return (
@@ -34,7 +43,7 @@ const Header = () => {
                 <Space wrap>
                   <ConfigProvider theme={{
                     token: {
-                      colorBgElevated: "var(--backgroundColor)",
+                      colorBgElevated: "var(--boxColor)",
                       colorText: "var(--textColor)"
                     }
                   }}>
@@ -45,7 +54,7 @@ const Header = () => {
                 </Space>
             </Space>
           </li>
-          <li>
+          <li className={styles.liAddVideo}>
             <CgMathPlus size={28} />
           </li>
         </ul>

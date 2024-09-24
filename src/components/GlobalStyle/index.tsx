@@ -12,11 +12,13 @@ const GlobalStyle = () => {
     const themeStyles = {
         "dark": {
             "backgroundColor": "#212121",
-            "textColor": "white"
+            "textColor": "white",
+            "boxColor": "#333232"
         },
         "light": {
             "backgroundColor": "#e9f2eb",
-            "textColor": "black"
+            "textColor": "black",
+            "boxColor": "#E1E1E1"
         }
     };
 
@@ -40,6 +42,7 @@ const GlobalStyle = () => {
         :root {
             --backgroundColor: ${currentTheme.backgroundColor};
             --textColor: ${currentTheme.textColor};
+            --boxColor: ${currentTheme.boxColor}
         }
 
         body { font-family: "Sora"; }

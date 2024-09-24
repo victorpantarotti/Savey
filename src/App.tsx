@@ -1,5 +1,6 @@
 import GlobalStyle from './components/GlobalStyle';
 import Header from './components/Header';
+import Login from './components/Login';
 import Footer from './components/Footer';
 
 import styled from 'styled-components';
@@ -17,6 +18,7 @@ function App() {
       <AppDiv>
         <GlobalStyle />
         <Header />
+        <Login />
         <Footer />
       </AppDiv>
     </>

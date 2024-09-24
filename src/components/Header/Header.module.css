@@ -1,4 +1,4 @@
-header {
+.header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,7 +23,7 @@ header {
     list-style: none;
 }
 
-/* :where(.css-dev-only-do-not-override-14qglws).ant-dropdown .ant-dropdown-menu, :where(.css-dev-only-do-not-override-14qglws).ant-dropdown-menu-submenu .ant-dropdown-menu {
-    background-color: var(--backgroundColor);
-    box-shadow: 0 6px 16px 0 rgba(255, 255, 255, 0.08), 0 3px 6px -4px rgba(255, 255, 255, 0.12), 0 9px 28px 8px rgba(255, 255, 255, 0.05);
-} */
+@media screen and (max-width: 860px) {
+    .liAddVideo { display: none; }
+    .menu { margin-left: 0; }
+}

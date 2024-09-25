@@ -6,7 +6,7 @@ const Footer = () => {
 
     return (
         <footer className={styles.footer}>
-            <h3 className={styles.text}>victorpantarotti • user: {user} • :)</h3>
+            <h3 className={styles.text}>victorpantarotti • user: {user || "?"} • :)</h3>
         </footer>
     )
 };

@@ -45,6 +45,8 @@ const GlobalStyle = () => {
             --boxColor: ${currentTheme.boxColor}
         }
 
+        html, body { height: 100%; }
+
         body { font-family: "Sora"; }
 
         .dark-theme {

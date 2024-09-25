@@ -1,16 +1,16 @@
 import { createContext, ReactElement, SetStateAction, useEffect, useState } from "react";
 
-interface PreferencesProviderProps {
-    children: ReactElement
-}
-
 interface PreferencesContextInterface {
     user: string,
     setUser: React.Dispatch<SetStateAction<string>>,
     theme: string,
     setTheme: React.Dispatch<SetStateAction<string>>,
-    loginModalState: boolean,
-    setLoginModalState: React.Dispatch<SetStateAction<boolean>>
+    loginModalState: object,
+    setLoginModalState: React.Dispatch<SetStateAction<IloginModalState>>
+}
+
+interface PreferencesProviderProps {
+    children: ReactElement
 }
 
 interface IloginModalState {

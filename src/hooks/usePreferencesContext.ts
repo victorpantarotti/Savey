@@ -7,9 +7,12 @@ export const usePreferencesContext = () => {
     const changeTheme = () => theme === "dark" ? setTheme("light") : setTheme("dark");
 
     const changeUser = (user: string) => {
-        localStorage.setItem("user", user);
-        setUser(user);
-        setLoginModalState(false);
+        localStorage.setItem("user", user.toLowerCase());
+        setUser(user.toLowerCase());
+        setLoginModalState({
+            active: false,
+            closable: false
+        });
     };
 
     return {

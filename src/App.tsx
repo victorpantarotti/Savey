@@ -1,7 +1,7 @@
-import GlobalStyle from './components/GlobalStyle';
 import Header from './components/Header';
 import Login from './components/Login';
 import Footer from './components/Footer';
+
 import { useVideosContext } from './hooks/useVideosContext';
 
 import styled from 'styled-components';
@@ -13,20 +13,14 @@ const AppDiv = styled.div`
   color: var(--textColor);
   font-family: "Sora";
 `;
-  
+
 function App() {
-  const { videos, changeVideosOrder } = useVideosContext();
-  
+  const { videos } = useVideosContext();
+
   return (
     <AppDiv>
-      <GlobalStyle />
       <Header />
-      <button onClick={() => {
-        changeVideosOrder(2, 4);
-      }}>
-        teste
-      </button>
-      {!!videos 
+      {videos.length > 0 
         ? videos.map((video) => {
           return <p>{video.channel} | {video.order}</p>
         })

@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { GlobalProvider } from "@/contexts/GlobalContext";
 import { PreferencesProvider } from "@/contexts/PreferencesContext";
 import { VideosProvider } from "@/contexts/VideosContext";
 
@@ -8,11 +9,13 @@ interface ContextProvidersProps {
 
 const ContextProviders = ({ children }: ContextProvidersProps) => {
     return (
-        <PreferencesProvider>
-            <VideosProvider>
-                {children}
-            </VideosProvider>
-        </PreferencesProvider>
+        <GlobalProvider>
+            <PreferencesProvider>
+                <VideosProvider>
+                    {children}
+                </VideosProvider>
+            </PreferencesProvider>
+        </GlobalProvider>
     )
 };
 

@@ -5,6 +5,9 @@ import Footer from './components/Footer';
 import { useVideosContext } from './hooks/useVideosContext';
 
 import styled from 'styled-components';
+import Alert from './components/Alert';
+import { useGlobalContext } from './hooks/useGlobalContext';
+import { useEffect } from 'react';
 
 const AppDiv = styled.div`
   width: 100%;
@@ -16,10 +19,16 @@ const AppDiv = styled.div`
 
 function App() {
   const { videos } = useVideosContext();
+  const { alertState } = useGlobalContext();
+
+  useEffect(() => {
+
+  }, [alertState]);
 
   return (
     <AppDiv>
       <Header />
+      {/* {alertState.isThereAnAlert ? <Alert type="fail" message="Digite uma URL válida!" time="30s" /> : ""} */}
       {videos.length > 0 
         ? videos.map((video) => {
           return <p>{video.channel} | {video.order}</p>

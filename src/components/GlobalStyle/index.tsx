@@ -16,7 +16,7 @@ const GlobalStyle = () => {
             "boxColor": "#333232"
         },
         "light": {
-            "backgroundColor": "#e9f2eb",
+            "backgroundColor": "#DAE3DC",
             "textColor": "black",
             "boxColor": "#E1E1E1"
         }
@@ -49,15 +49,17 @@ const GlobalStyle = () => {
 
         body { font-family: "Sora"; }
 
-        .dark-theme {
-            --backgroundColor: var(--dark-backgroundColor);
-            --textColor: var(--dark-textColor);
+        /* custom scroll */
+
+        ::-webkit-scrollbar { width: 7px; }
+
+        ::-webkit-scrollbar-track { background-color: black; }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #676767;
+            border-radius: 10px;
         }
 
-        .light-theme {
-            --backgroundColor: var(--white-backgroundColor);
-            --textColor: var(--white-textColor);
-        }
     `;
 
     return <Styled />;

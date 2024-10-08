@@ -1,0 +1,73 @@
+.alert {
+    width: 250px;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-size: 16px;
+    color: white;
+    border-radius: 5px;
+    animation: fadeIn 0.5s linear forwards;
+}
+
+.success {
+    background-color: rgba(96, 204, 96, 0.75);
+    border-left: 5px solid green;
+}
+
+.fail {
+    background-color: rgba(204, 96, 96, 0.75);
+    border-left: 5px solid red;
+}
+
+.progressbar {
+    width: 100%;
+}
+
+.inner {
+    height: 5px;
+    border-bottom-right-radius: 5px;
+
+    animation: progressbar-countdown;
+    animation-duration: 40s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+    animation-timing-function: linear;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.close:hover { cursor: pointer; }
+
+.out {
+    animation: fadeOut 0.5s linear forwards;
+}
+
+@keyframes progressbar-countdown {
+    0% {
+        width: 100%;
+        background: #fff;
+    }
+    100% {
+        width: 0%;
+        background: #212121;
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}

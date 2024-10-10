@@ -4,7 +4,7 @@ import { get, getDatabase, ref } from "firebase/database";
 import utils from "@/utils/index";
 import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 
-interface VideosObject {
+export interface VideosObject {
     channel: string,
     favorite: boolean,
     favoriteOrder: number,

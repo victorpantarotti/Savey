@@ -23,12 +23,12 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         currentAlert: {
             type: "success",
             message: "",
-            time: "5s"
+            time: ""
         },
         newAlert: {
             type: "success",
             message: "",
-            time: "5s"
+            time: ""
         },
     });
 

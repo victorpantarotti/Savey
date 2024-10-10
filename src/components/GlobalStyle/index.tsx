@@ -13,12 +13,14 @@ const GlobalStyle = () => {
         "dark": {
             "backgroundColor": "#212121",
             "textColor": "white",
-            "boxColor": "#333232"
+            "boxColor": "#333232",
+            "boxShadowColor": "rgba(255, 255, 255, 0.30)"
         },
         "light": {
             "backgroundColor": "#DAE3DC",
             "textColor": "black",
-            "boxColor": "#E1E1E1"
+            "boxColor": "#BBC4BD",
+            "boxShadowColor": "rgba(0, 0, 0, 1)"
         }
     };
 
@@ -42,7 +44,8 @@ const GlobalStyle = () => {
         :root {
             --backgroundColor: ${currentTheme.backgroundColor};
             --textColor: ${currentTheme.textColor};
-            --boxColor: ${currentTheme.boxColor}
+            --boxColor: ${currentTheme.boxColor};
+            --boxShadowColor: ${currentTheme.boxShadowColor};
         }
 
         html, body { height: 100%; }

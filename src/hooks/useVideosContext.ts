@@ -1,4 +1,4 @@
-import { VideosContext } from "@/contexts/VideosContext";
+import { VideosContext, VideosObject } from "@/contexts/VideosContext";
 import { useContext } from "react";
 
 export const useVideosContext = () => {
@@ -28,8 +28,21 @@ export const useVideosContext = () => {
         return setVideos(newArray); 
     };
 
+    const deleteVideo = (video: VideosObject) => {
+        let index = videos.indexOf(video);
+        if (index > -1) {
+            videos.splice(index, 1);
+        }
+
+        setVideos(videos.map((v) => {
+            if (v.order > video.order) return { ...v, order: v.order-- };
+            return { ...v };
+        }));
+    };
+
     return {
         videos,
-        changeVideosOrder
+        changeVideosOrder,
+        deleteVideo
     };
 };

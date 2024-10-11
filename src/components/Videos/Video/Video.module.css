@@ -13,6 +13,9 @@
 
 .video img {
     width: 100%;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 
 .video .container {
@@ -59,3 +62,11 @@
 }
 
 .video .buttons a:hover { cursor: pointer; }
+
+@media screen and (max-width: 792px) {
+    .video { width: 40%; }
+}
+
+@media screen and (max-width: 538px) {
+    .video { width: 90%; }
+}

@@ -4,6 +4,7 @@ import Video from "./Video";
 
 import styled from "styled-components";
 import utils from "@/utils";
+import Timestamp from "./Timestamp";
 
 const VideosContainer = styled.div`
     display: flex;
@@ -11,6 +12,7 @@ const VideosContainer = styled.div`
     gap: 24px;
     flex-wrap: wrap;
     margin: 24px 24px 0 24px;
+    padding-bottom: 50px;
 `;
 
 const CenterText = styled.p`
@@ -26,35 +28,45 @@ const NoVideos = styled.p`
 `;
 
 const Videos = () => {
-    const { videos } = useVideosContext();
+    const { videos, favoriteListState } = useVideosContext();
     const [stats, setStats] = useState({
         amount: 0,
         totalTime: "0:00:00"
     });
 
+    const getList = () => {
+        if (favoriteListState) {
+            const filterFavorites = videos.filter((item) => item.favoriteOrder > 0);
+            const sortedArray = filterFavorites.sort((a, b) => a.favoriteOrder - b.favoriteOrder);
+            return sortedArray;
+        }
+        return videos;
+    };
+
     useEffect(() => {
         let times: Array<string> = [];
 
-        videos.map((video) => {
+        getList().map((video) => {
             times.push(video.time);
         });
 
         setStats({
-            amount: videos.length,
+            amount: getList().length,
             totalTime: utils.sumTime(times)
         });
-    }, [videos]);
+    }, [videos, favoriteListState]);
 
     return (
         <>
+            <Timestamp />
             <CenterText>Total de vídeos: {stats.amount} • Horas somadas: {stats.totalTime}</CenterText>
             <VideosContainer>
                 {
-                    videos.length > 0
-                    ? videos.map((video) => {
+                    getList().length > 0
+                    ? getList().map((video) => {
                         return <Video video={video} key={video.id} />;
                     })
-                    : <NoVideos>Você não tem nenhum vídeo salvo!</NoVideos>
+                    : favoriteListState ? <NoVideos>Você não tem nenhum vídeo favorito!</NoVideos> : <NoVideos>Você não tem nenhum vídeo salvo!</NoVideos>
                 }
             </VideosContainer>
         </>

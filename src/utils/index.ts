@@ -9,6 +9,11 @@ const arrayToObject = (array: Item[]): Record<string | number, Item> => array.re
 
 const objectToArray = (obj: Record<string | number, Item>): Item[] => Object.keys(obj).map((key) => obj[key]);
 
+function checkTimeFormat(time: string): boolean {
+  const regex = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/;
+  return regex.test(time);
+}
+
 function parseTimeToSeconds(time: string): number {
   const parts = time.split(':').map(Number);
   let seconds = 0;
@@ -46,5 +51,6 @@ function sumTime(times: string[]): string {
 export default {
   arrayToObject,
   objectToArray,
+  checkTimeFormat,
   sumTime
 };

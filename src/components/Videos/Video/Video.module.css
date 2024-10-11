@@ -1,4 +1,5 @@
 .video {
+    position: relative;
     display: flex;
     width: 18%;
     min-width: 230px;
@@ -9,6 +10,14 @@
     overflow: hidden;
     box-sizing: border-box;
     box-shadow: 4px 4px 8px -1px var(--boxShadowColor);
+}
+
+.video .order {
+    position: absolute;
+    font-size: 10px;
+    margin: 0 12px 8px 0;
+    bottom: 0;
+    right: 0;
 }
 
 .video img {
@@ -43,6 +52,10 @@
     margin: 0;
     font-size: 11px;
     font-weight: 300;
+}
+
+.video .lastTime {
+    margin-top: 2px;
 }
 
 .video .buttons {

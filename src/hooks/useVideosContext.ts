@@ -2,7 +2,7 @@ import { VideosContext, VideosObject } from "@/contexts/VideosContext";
 import { useContext } from "react";
 
 export const useVideosContext = () => {
-    const { videos, setVideos } = useContext(VideosContext);
+    const { videos, setVideos, favoriteListState, setFavoriteListState, timestampState, setTimestampState } = useContext(VideosContext);
 
     const changeVideosOrder = (currentPos: number, newPos: number) => {
         const newArray = videos.map((video) => {
@@ -40,9 +40,44 @@ export const useVideosContext = () => {
         }));
     };
 
+    const favoriteAction = (video: VideosObject) => {
+        if (video.favorite) return remFavorite(video);
+        return addFavorite(video);
+    };
+
+    const addFavorite = (video: VideosObject) => {
+        let favorites = videos.filter((v) => v.favorite === true);
+
+        setVideos(videos.map((v) => {
+            if (v.id === video.id) return { ...v, favorite: true, favoriteOrder: favorites.length };
+            return { ...v };
+        }));
+    };
+
+    const remFavorite = (video: VideosObject) => {
+        setVideos(videos.map((v) => {
+            if (v.id === video.id) return { ...v, favorite: false, favoriteOrder: 0 };
+            if (v.favoriteOrder > video.favoriteOrder) return { ...v, favoriteOrder: v.favoriteOrder-- };
+            return { ...v };
+        }));
+    };
+
+    const saveTimestamp = (video: VideosObject, timestamp: string) => {
+        setVideos(videos.map((v) => {
+            if (v.id === video.id) return { ...v, lastTime: timestamp };
+            return { ...v };
+        }));
+    };
+
     return {
         videos,
+        favoriteListState,
+        setFavoriteListState,
+        timestampState,
+        setTimestampState,
         changeVideosOrder,
-        deleteVideo
+        deleteVideo,
+        favoriteAction,
+        saveTimestamp
     };
 };

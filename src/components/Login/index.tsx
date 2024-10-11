@@ -13,6 +13,7 @@ const Login = () => {
     const loginAction = () => {
         if (!inputState) return alert('escreve algo ae');
         changeUser(inputState);
+        setInputState("");
     };
 
     const handleCancel = () => {

@@ -1,19 +1,23 @@
 import type { MenuProps } from 'antd';
 import { Space, Dropdown, ConfigProvider } from "antd";
-import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile, CgHeart } from "react-icons/cg";
+import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile } from "react-icons/cg";
+import { FaHeart, FaRegHeart } from 'react-icons/fa6';
+import DropdownButton from './DropdownButton';
+
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
+import { useVideosContext } from '@/hooks/useVideosContext';
 
 import styles from "./Header.module.css";
-import DropdownButton from './DropdownButton';
 
 const Header = () => {
   const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
+  const { favoriteListState, setFavoriteListState } = useVideosContext();
 
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
-        <DropdownButton icon={<CgHeart />} text="Favoritos" onClick={() => {}} />
+        <DropdownButton icon={favoriteListState ? <FaHeart /> : <FaRegHeart />} text="Favoritos" onClick={() => setFavoriteListState(!favoriteListState)} />
       ),
     },
     {

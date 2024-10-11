@@ -28,7 +28,7 @@ const InputElement = ({ placeholder, prefix = null, onEnterPress, inputState, se
                 prefix={prefix}
                 value={inputState}
                 onChange={(e) => setInputState(e.target.value)} 
-                onKeyDown={(e) => e.code === 'Enter' ? onEnterPress() : ""}
+                onKeyDown={(e) => e.keyCode === 13 || e.keyCode === 108 ? onEnterPress() : ""}
             />
         </ConfigProvider>
     )

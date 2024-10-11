@@ -16,9 +16,18 @@ export interface VideosObject {
     title: string
 }
 
+interface TimestampStateInferface {
+    active: boolean,
+    video: VideosObject | object
+}
+
 interface VideosContextInterface {
     videos: Array<VideosObject>,
-    setVideos: React.Dispatch<SetStateAction<Array<VideosObject>>>
+    setVideos: React.Dispatch<SetStateAction<Array<VideosObject>>>,
+    favoriteListState: boolean,
+    setFavoriteListState: React.Dispatch<SetStateAction<boolean>>
+    timestampState: object,
+    setTimestampState: React.Dispatch<SetStateAction<object>>
 }
 
 interface VideosProviderProps {
@@ -29,9 +38,15 @@ export const VideosContext = createContext<VideosContextInterface>({} as VideosC
 VideosContext.displayName = "Videos";
 
 export const VideosProvider = ({ children }: VideosProviderProps) => {
+    const { user } = usePreferencesContext();
+    
     const db = getDatabase(firebaseConfig);
     const [videos, setVideos] = useState([]);
-    const { user } = usePreferencesContext();
+    const [favoriteListState, setFavoriteListState] = useState(false);
+    const [timestampState, setTimestampState] = useState<TimestampStateInferface>({
+        active: false,
+        video: {}
+    });
 
     useEffect(() => {
         if (user) {
@@ -40,12 +55,6 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
                     const array = utils.objectToArray(snap.val());
                     const sortedArray = array.sort((a, b) => a.order - b.order);
                     return setVideos(sortedArray);
-
-                    /* to show favorites
-                    const filterFavorites = array.filter((item) => item.favoriteOrder > 0);
-                    const sortedArray = filterFavorites.sort((a, b) => a.favoriteOrder - b.favoriteOrder);
-                    return setVideos(sortedArray); 
-                    */
                 }
                 return setVideos([]);
             });
@@ -54,7 +63,14 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
 
 
     return (
-        <VideosContext.Provider value={{ videos, setVideos }}>
+        <VideosContext.Provider value={{ 
+            videos, 
+            setVideos, 
+            favoriteListState, 
+            setFavoriteListState,
+            timestampState,
+            setTimestampState
+        }}>
             {children}
         </VideosContext.Provider>
     );

@@ -1,13 +1,11 @@
-interface Item {
-    id: string | number;
-}
+import { VideosObject } from "@/contexts/VideosContext";
 
-const arrayToObject = (array: Item[]): Record<string | number, Item> => array.reduce((obj, item) => {
-    obj[item.id] = item;
-    return obj;
-}, {} as Record<string | number, Item>);
+const arrayToObject = (array: VideosObject[]): Record<string | number, VideosObject> => array.reduce((obj, item) => {
+  obj[item.id] = item;
+  return obj;
+}, {} as Record<string | number, VideosObject>);
 
-const objectToArray = (obj: Record<string | number, Item>): Item[] => Object.keys(obj).map((key) => obj[key]);
+const objectToArray = (obj: Record<string | number, VideosObject>): VideosObject[] => Object.keys(obj).map((key) => obj[key]);
 
 function checkTimeFormat(time: string): boolean {
   const regex = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/;

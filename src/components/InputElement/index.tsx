@@ -1,5 +1,5 @@
 import { ReactElement, SetStateAction } from "react";
-import { ConfigProvider, Input } from "antd";
+import { Input } from "antd";
 
 interface InputElementProps {
     placeholder: string,

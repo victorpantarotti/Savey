@@ -4,12 +4,19 @@ import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 import Sora from "./fonts/Sora.ttf";
 import AmsterdamTwo from "./fonts/amsterdam-two.ttf";
 
+interface ThemeStylesInterface {
+    backgroundColor: string,
+    textColor: string,
+    boxColor: string,
+    boxShadowColor: string
+}
+
 import './normalize.css';
 
 const GlobalStyle = () => {
     const { theme } = usePreferencesContext();
 
-    const themeStyles = {
+    const themeStyles: Record<string, ThemeStylesInterface> = {
         "dark": {
             "backgroundColor": "#212121",
             "textColor": "white",

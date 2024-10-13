@@ -21,14 +21,18 @@ GlobalContext.displayName = "Global";
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     const [alertState, setAlertState] = useState<AlertStateInterface>({
         currentAlert: {
+            active: false,
             type: "success",
             message: "",
-            time: ""
+            time: "",
+            onTimeEnd: () => {}
         },
         newAlert: {
+            active: false,
             type: "success",
             message: "",
-            time: ""
+            time: "",
+            onTimeEnd: () => {}
         },
     });
 

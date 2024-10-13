@@ -1,10 +1,9 @@
-import { useTransition } from "react-transition-state";
+// import { useState } from "react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
 import styles from "./Alert.module.css";
 import styled from "styled-components";
-import { useState } from "react";
 
 export interface AlertProps {
     type: "success" | "fail",
@@ -22,12 +21,12 @@ const AlertContainer = styled.div`
 `
 
 const Alert = ({ type, message, time, active, onTimeEnd }: AlertProps) => {
-    const [firstRender, isFirstRender] = useState(true);
+    // const [firstRender, isFirstRender] = useState(true);
 
-    const onFirstRender = () => {
-        isFirstRender(false);
-        return "";
-    };
+    // const onFirstRender = () => {
+    //     isFirstRender(false);
+    //     return "";
+    // };
 
     const handleProgressbarEnd = () => onTimeEnd();
 

@@ -1,3 +1,4 @@
+import { ConfigProvider } from 'antd';
 import Header from './components/Header';
 import Login from './components/Login';
 import Videos from './components/Videos';
@@ -15,12 +16,29 @@ const AppDiv = styled.div`
 
 function App() {
   return (
-    <AppDiv>
-      <Header />
-      <Login />
-      <Videos />
-      <Footer />
-    </AppDiv>
+    <ConfigProvider theme={{
+      token: {
+        colorBgElevated: "var(--boxColor)",
+        colorText: "var(--textColor)",
+        colorTextPlaceholder: "var(--textColor)",
+        colorIcon: "var(--textColor)",
+        colorIconHover: "var(--textColor)",
+      },
+      components: {
+        Input: {
+          activeBg: "var(--boxColor)",
+          colorBgContainer: "var(--backgroundColor)",
+          colorBorder: "var(--backgroundColor)"
+        }
+      }
+    }}>
+      <AppDiv>
+        <Header />
+        <Login />
+        <Videos />
+        <Footer />
+      </AppDiv>
+    </ConfigProvider>
   );
 }
 

@@ -1,10 +1,13 @@
 import { useVideosContext } from "@/hooks/useVideosContext";
 import { useEffect, useState } from "react";
+import utils from "@/utils";
+
 import Video from "./Video";
+import Timestamp from "./Timestamp";
+import SetOrder from "./SetOrder";
+import Search from "./Search";
 
 import styled from "styled-components";
-import utils from "@/utils";
-import Timestamp from "./Timestamp";
 
 const VideosContainer = styled.div`
     display: flex;
@@ -28,18 +31,16 @@ const NoVideos = styled.p`
 `;
 
 const Videos = () => {
-    const { videos, favoriteListState } = useVideosContext();
+    const { videos, favoriteListState, getFavoriteList, filter, filterItems } = useVideosContext();
     const [stats, setStats] = useState({
         amount: 0,
         totalTime: "0:00:00"
     });
 
     const getList = () => {
-        if (favoriteListState) {
-            const filterFavorites = videos.filter((item) => item.favoriteOrder > 0);
-            const sortedArray = filterFavorites.sort((a, b) => a.favoriteOrder - b.favoriteOrder);
-            return sortedArray;
-        }
+        if (filter.active) return filterItems(filter);
+        if (favoriteListState) return getFavoriteList();
+
         return videos;
     };
 
@@ -54,19 +55,25 @@ const Videos = () => {
             amount: getList().length,
             totalTime: utils.sumTime(times)
         });
-    }, [videos, favoriteListState]);
+    }, [videos, favoriteListState, filter]);
 
     return (
         <>
+            <Search />
             <Timestamp />
-            <CenterText>Total de vídeos: {stats.amount} • Horas somadas: {stats.totalTime}</CenterText>
+            <SetOrder />
+            <CenterText>Total de vídeos: {stats.amount} • Horas somadas: {stats.totalTime} {favoriteListState ? "• Favoritos" : ""} {filter.active ? "• Filtro ativo": ""}</CenterText>
             <VideosContainer>
                 {
                     getList().length > 0
                     ? getList().map((video) => {
                         return <Video video={video} key={video.id} />;
                     })
-                    : favoriteListState ? <NoVideos>Você não tem nenhum vídeo favorito!</NoVideos> : <NoVideos>Você não tem nenhum vídeo salvo!</NoVideos>
+                    : favoriteListState 
+                    ? <NoVideos>Você não tem nenhum vídeo favorito!</NoVideos> : 
+                        filter.active 
+                        ? <NoVideos>Nenhum vídeo encontrado!</NoVideos> 
+                            : <NoVideos>Você não tem nenhum vídeo salvo!</NoVideos>
                 }
             </VideosContainer>
         </>

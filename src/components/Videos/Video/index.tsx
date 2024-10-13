@@ -11,7 +11,7 @@ interface VideoProps {
 
 const Video = ({ video }: VideoProps) => {
     const { channel, favorite, id, lastTime, thumb, time, title, order, favoriteOrder } = video;
-    const { changeVideosOrder, deleteVideo, favoriteAction, favoriteListState, setTimestampState } = useVideosContext();
+    const { changeVideosOrder, changeFavoriteVideosOrder, deleteVideo, favoriteAction, favoriteListState, setTimestampState, setCustomOrder } = useVideosContext();
     const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
 
     const handleArrowUp = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -20,10 +20,14 @@ const Video = ({ video }: VideoProps) => {
             clearTimeout(clickTimeout);
             setClickTimeout(null);
 
-            alert('Double click detected!');
+            setCustomOrder({
+                active: true,
+                video: video
+            });
         } else {
             const timeout = setTimeout(() => { // single click
                 changeVideosOrder(order, order - 1);
+                if (favoriteListState) changeFavoriteVideosOrder(favoriteOrder, favoriteOrder - 1);
                 setClickTimeout(null);
             }, 150);
             setClickTimeout(timeout);
@@ -61,6 +65,7 @@ const Video = ({ video }: VideoProps) => {
                 <a onClick={(e) => {
                     e.preventDefault();
                     changeVideosOrder(order, order + 1);
+                    if (favoriteListState) changeFavoriteVideosOrder(favoriteOrder, favoriteOrder + 1);
                 }}>
                     <FaArrowDown />
                 </a>

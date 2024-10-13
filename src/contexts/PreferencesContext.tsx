@@ -5,7 +5,7 @@ interface PreferencesContextInterface {
     setUser: React.Dispatch<SetStateAction<string>>,
     theme: string,
     setTheme: React.Dispatch<SetStateAction<string>>,
-    loginModalState: object,
+    loginModalState: IloginModalState,
     setLoginModalState: React.Dispatch<SetStateAction<IloginModalState>>
 }
 

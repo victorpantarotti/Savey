@@ -1,6 +1,6 @@
 import type { MenuProps } from 'antd';
-import { Space, Dropdown, ConfigProvider } from "antd";
-import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile } from "react-icons/cg";
+import { Space, Dropdown } from "antd";
+import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile, CgSearch } from "react-icons/cg";
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
 import DropdownButton from './DropdownButton';
 
@@ -11,7 +11,7 @@ import styles from "./Header.module.css";
 
 const Header = () => {
   const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
-  const { favoriteListState, setFavoriteListState } = useVideosContext();
+  const { favoriteListState, setFavoriteListState, searchState, setSearchState } = useVideosContext();
 
   const items: MenuProps['items'] = [
     {
@@ -23,11 +23,17 @@ const Header = () => {
     {
       key: '2',
       label: (
-        <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
+        <DropdownButton icon={<CgSearch />} text="Buscar" onClick={() => setSearchState(!searchState)} />
       ),
     },
     {
       key: '3',
+      label: (
+        <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
+      ),
+    },
+    {
+      key: '4',
       label: (
         <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => setLoginModalState({
           active: true,
@@ -44,18 +50,11 @@ const Header = () => {
         <ul className={styles.menu}>
           <li>
             <Space direction="vertical">
-                <Space wrap>
-                  <ConfigProvider theme={{
-                    token: {
-                      colorBgElevated: "var(--boxColor)",
-                      colorText: "var(--textColor)"
-                    }
-                  }}>
-                    <Dropdown menu={{ items }} placement="bottomLeft" className={`${theme}-theme`}>
-                        <CgMenu size={28} fontWeight={12} />
-                    </Dropdown>
-                  </ConfigProvider>
-                </Space>
+              <Space wrap>
+                <Dropdown menu={{ items }} placement="bottomLeft" className={`${theme}-theme`}>
+                  <CgMenu size={28} fontWeight={12} />
+                </Dropdown>
+              </Space>
             </Space>
           </li>
           <li className={styles.liAddVideo}>

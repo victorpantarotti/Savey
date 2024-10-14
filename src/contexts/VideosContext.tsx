@@ -38,7 +38,9 @@ interface VideosContextInterface {
     filter: FilterInterface,
     setFilter: React.Dispatch<SetStateAction<FilterInterface>>,
     searchState: boolean,
-    setSearchState: React.Dispatch<SetStateAction<boolean>>
+    setSearchState: React.Dispatch<SetStateAction<boolean>>,
+    addVideoState: boolean,
+    setAddVideoState: React.Dispatch<SetStateAction<boolean>>
 }
 
 interface VideosProviderProps {
@@ -67,6 +69,7 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
         filter: ""
     });
     const [searchState, setSearchState] = useState(false);
+    const [addVideoState, setAddVideoState] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -95,7 +98,9 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
             filter,
             setFilter,
             searchState,
-            setSearchState
+            setSearchState,
+            addVideoState,
+            setAddVideoState
         }}>
             {children}
         </VideosContext.Provider>

@@ -76,6 +76,10 @@
 
 .video .buttons a:hover { cursor: pointer; }
 
+@media screen and (min-width: 1833px) {
+    .video { width: 10%; }
+}
+
 @media screen and (max-width: 792px) {
     .video { width: 40%; }
 }

@@ -1,9 +1,15 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FilterInterface, VideosContext, VideosObject } from "@/contexts/VideosContext";
 import utils from "@/utils";
 
+interface VideoDataInterface {
+    id: string,
+    lastTime: string
+}
+
 export const useVideosContext = () => {
-    const { videos, setVideos, favoriteListState, setFavoriteListState, timestampState, setTimestampState, customOrder, setCustomOrder, filter, setFilter, searchState, setSearchState } = useContext(VideosContext);
+    const { videos, setVideos, favoriteListState, setFavoriteListState, timestampState, setTimestampState, customOrder, setCustomOrder, filter, setFilter, searchState, setSearchState, addVideoState, setAddVideoState } = useContext(VideosContext);
+    const [videoData, setVideoData] = useState<VideoDataInterface>({ id: "", lastTime: "" });
 
     const changeVideosOrder = (currentPos: number, newPos: number) => {
         if (newPos >= videos.length || newPos < 0) return;
@@ -58,6 +64,45 @@ export const useVideosContext = () => {
         
         return setVideos(newArray); 
     };
+
+    // addVideo - triggers when an action happen on "videoData"
+    useEffect(() => {
+        const { id, lastTime } = videoData;
+
+        const IDOnList = videos.filter((v) => v.id === id);
+        if (IDOnList.length > 0) return;
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${id}&key=${import.meta.env.VITE_YOUTUBE_API_KEY}&part=snippet,statistics,contentDetails`);
+                
+                if (!response.ok) return;
+                
+                const data = await response.json();
+                
+                setVideos([ ...videos, {
+                    id: id,
+                    title: data.items[0].snippet.title,
+                    channel: data.items[0].snippet.channelTitle,
+                    thumb: data.items[0].snippet.thumbnails.medium.url,
+                    time: utils.convertYTDuration(data.items[0].contentDetails.duration),
+                    lastTime: lastTime ? lastTime : "0h0m0s",
+                    favorite: false,
+                    order: videos.length,
+                    favoriteOrder: -1
+                }]);
+
+                if (addVideoState === true) return setAddVideoState(false);
+                return;
+            } catch (err) {
+                return;
+            } finally {
+                return;
+            }
+        };
+
+        fetchData();
+    }, [videoData]);
 
     const deleteVideo = (video: VideosObject) => {
         setVideos(
@@ -139,6 +184,10 @@ export const useVideosContext = () => {
         setFilter,
         filterItems,
         searchState,
-        setSearchState
+        setSearchState,
+        addVideoState,
+        setAddVideoState,
+        videoData,
+        setVideoData
     };
 };

@@ -6,6 +6,7 @@ import Video from "./Video";
 import Timestamp from "./Timestamp";
 import SetOrder from "./SetOrder";
 import Search from "./Search";
+import AddVideo from "./AddVideo";
 
 import styled from "styled-components";
 
@@ -59,6 +60,7 @@ const Videos = () => {
 
     return (
         <>
+            <AddVideo />
             <Search />
             <Timestamp />
             <SetOrder />

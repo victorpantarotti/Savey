@@ -11,7 +11,7 @@ import styles from "./Header.module.css";
 
 const Header = () => {
   const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
-  const { favoriteListState, setFavoriteListState, searchState, setSearchState } = useVideosContext();
+  const { favoriteListState, setFavoriteListState, searchState, setSearchState, addVideoState, setAddVideoState } = useVideosContext();
 
   const items: MenuProps['items'] = [
     {
@@ -48,7 +48,7 @@ const Header = () => {
       <header className={styles.header}>
         <p className={styles.savey}>Savey</p>
         <ul className={styles.menu}>
-          <li>
+          <li className={styles.btn}>
             <Space direction="vertical">
               <Space wrap>
                 <Dropdown menu={{ items }} placement="bottomLeft" className={`${theme}-theme`}>
@@ -57,7 +57,7 @@ const Header = () => {
               </Space>
             </Space>
           </li>
-          <li className={styles.liAddVideo}>
+          <li className={`${styles.liAddVideo} ${styles.btn}`} onClick={() => setAddVideoState(!addVideoState)}>
             <CgMathPlus size={28} />
           </li>
         </ul>

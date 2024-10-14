@@ -1,5 +1,11 @@
 import { VideosObject } from "@/contexts/VideosContext";
 
+interface IsYoutubeURLInterface {
+  valid: boolean,
+  id: string,
+  lastTime: string
+}
+
 const arrayToObject = (array: VideosObject[]): Record<string | number, VideosObject> => array.reduce((obj, item) => {
   obj[item.id] = item;
   return obj;
@@ -80,10 +86,49 @@ function compareTimes(time: string, filterTime: string): boolean {
   return parseTimeToSeconds(time) <= parseTimeString(filterTime);
 }
 
+function isYoutubeURL(url: string): IsYoutubeURLInterface {
+  const regExp = /^(?:.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#&\?]*)(?:.*[?&]t=([^&#]*))?.*)$/;
+  const match = url.match(regExp);
+
+  return {
+    valid: match && match[1].length == 11 || false,
+    id: match && match[1] || "",
+    lastTime: match && match[2] || ""
+  };
+}
+
+function convertYTDuration(duration: string): string {
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+
+  if (!match) return '00:00';
+
+  const [hoursPart, minutesPart, secondsPart] = match.slice(1).map((x) => {
+    return x ? x.replace(/\D/, '') : '0'; // Default to '0' if null
+  });
+
+  const hours = parseInt(hoursPart) || 0;
+  const minutes = parseInt(minutesPart) || 0;
+  const seconds = parseInt(secondsPart) || 0;
+
+  const date = new Date(0);
+  date.setSeconds(hours * 3600 + minutes * 60 + seconds);
+  const format = date.toISOString().substring(11, 19);
+  const formatSplit = format.split(':');
+  
+  let time = '';
+
+  if (formatSplit[0] !== '00') time += `${formatSplit[0]}:`; // hr
+  time += `${formatSplit[1]}:${formatSplit[2]}`; // min + sec
+
+  return time;
+}
+
 export default {
   arrayToObject,
   objectToArray,
   checkTimeFormat,
   sumTime,
-  compareTimes
+  compareTimes,
+  isYoutubeURL,
+  convertYTDuration
 };

@@ -5,6 +5,7 @@ import Videos from './components/Videos';
 import Footer from './components/Footer';
 
 import styled from 'styled-components';
+import ScrollToTop from './components/ScrollToTop';
 
 const AppDiv = styled.div`
   width: 100%;
@@ -33,6 +34,7 @@ function App() {
       }
     }}>
       <AppDiv>
+        <ScrollToTop />
         <Header />
         <Login />
         <Videos />

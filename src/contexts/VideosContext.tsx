@@ -1,8 +1,9 @@
 import React, { createContext, ReactElement, SetStateAction, useEffect, useState } from "react";
+import { usePreferencesContext } from "@/hooks/usePreferencesContext";
+import { useGlobalContext } from "@/hooks/useGlobalContext";
 import firebaseConfig from "@/utils/initDatabase";
 import { get, getDatabase, ref } from "firebase/database";
 import utils from "@/utils/index";
-import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 
 export interface VideosObject {
     channel: string,
@@ -52,6 +53,7 @@ VideosContext.displayName = "Videos";
 
 export const VideosProvider = ({ children }: VideosProviderProps) => {
     const { user } = usePreferencesContext();
+    const { showLoading } = useGlobalContext();
     
     const db = getDatabase(firebaseConfig);
     const [videos, setVideos] = useState<Array<VideosObject>>([]);
@@ -72,8 +74,10 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const [addVideoState, setAddVideoState] = useState(false);
 
     useEffect(() => {
+        showLoading("show");
+
         if (user) {
-            get(ref(db, user)).then((snap) => {
+            get(ref(db, user)).then(async (snap) => {
                 if (snap.exists()) {
                     const array = utils.objectToArray(snap.val());
                     const sortedArray = array.sort((a, b) => a.order - b.order);
@@ -83,7 +87,6 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
             });
         }
     }, [user]);
-
 
     return (
         <VideosContext.Provider value={{ 

@@ -12,8 +12,6 @@
   animation: fadeIn 0.5s;
 }
 
-.in { display: block; }
-
 .out {
   animation: fadeOut 0.5s linear forwards;
 }

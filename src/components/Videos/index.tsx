@@ -1,4 +1,5 @@
 import { useVideosContext } from "@/hooks/useVideosContext";
+import { useGlobalContext } from "@/hooks/useGlobalContext";
 import { useEffect, useState } from "react";
 import utils from "@/utils";
 
@@ -33,6 +34,7 @@ const NoVideos = styled.p`
 
 const Videos = () => {
     const { videos, favoriteListState, getFavoriteList, filter, filterItems } = useVideosContext();
+    const { showLoading } = useGlobalContext();
     const [stats, setStats] = useState({
         amount: 0,
         totalTime: "0:00:00"
@@ -44,7 +46,7 @@ const Videos = () => {
 
         return videos;
     };
-
+    
     useEffect(() => {
         let times: Array<string> = [];
 
@@ -56,6 +58,8 @@ const Videos = () => {
             amount: getList().length,
             totalTime: utils.sumTime(times)
         });
+
+        showLoading("hide");
     }, [videos, favoriteListState, filter]);
 
     return (

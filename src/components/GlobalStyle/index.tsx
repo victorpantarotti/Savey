@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { usePreferencesContext } from "@/hooks/usePreferencesContext";
+import { useGlobalContext } from "@/hooks/useGlobalContext";
 
 import Sora from "./fonts/Sora.ttf";
 import AmsterdamTwo from "./fonts/amsterdam-two.ttf";
@@ -15,6 +16,7 @@ import './normalize.css';
 
 const GlobalStyle = () => {
     const { theme } = usePreferencesContext();
+    const { loading } = useGlobalContext();
 
     const themeStyles: Record<string, ThemeStylesInterface> = {
         "dark": {
@@ -56,8 +58,11 @@ const GlobalStyle = () => {
         }
 
         html, body { height: 100%; }
-
-        body { font-family: "Sora"; }
+        
+        body { 
+            font-family: "Sora"; 
+            overflow: ${loading.active ? "hidden" : "auto"};
+        }
 
         /* custom scroll */
 

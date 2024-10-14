@@ -8,10 +8,12 @@ import { usePreferencesContext } from '@/hooks/usePreferencesContext';
 import { useVideosContext } from '@/hooks/useVideosContext';
 
 import styles from "./Header.module.css";
+import { useGlobalContext } from '@/hooks/useGlobalContext';
 
 const Header = () => {
   const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
   const { favoriteListState, setFavoriteListState, searchState, setSearchState, addVideoState, setAddVideoState } = useVideosContext();
+  const { createAlert } = useGlobalContext();
 
   const items: MenuProps['items'] = [
     {
@@ -38,6 +40,16 @@ const Header = () => {
         <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => setLoginModalState({
           active: true,
           closable: true
+        })} />
+      ),
+    },
+    {
+      key: '5',
+      label: (
+        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => createAlert({
+          type: "success",
+          message: "teste do alerta",
+          duration: "5s"
         })} />
       ),
     },

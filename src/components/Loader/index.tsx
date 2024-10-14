@@ -1,9 +1,11 @@
-import styles from "./Loader.module.css";
+import { useEffect, useState } from "react";
+import { useGlobalContext } from "@/hooks/useGlobalContext";
 
+import styles from "./Loader.module.css";
 import styled from "styled-components";
 
 const LoaderDiv = styled.div`
-    display: flex;
+    position: fixed;
     width: 100%;
     height: 100vh;
     background-color: var(--backgroundColor);
@@ -12,11 +14,31 @@ const LoaderDiv = styled.div`
     align-items: center;
     text-align: center;
     flex-direction: column;
+    z-index: 3;
 `;
 
 const Loader = () => {
+    const { loading, showLoading } = useGlobalContext();
+    const [display, setDisplay] = useState("none");
+    const [getOut, setGetOut] = useState(false);
+
+    const handleAnimationEnd = () => {
+        if (getOut) {
+            setGetOut(false);
+            setDisplay("none");
+            return showLoading("reset");
+        }
+        return;
+    }
+
+    useEffect(() => {
+        if (loading.hide) return setGetOut(true);
+        if (loading.active) return setDisplay("flex");
+        return;
+    }, [loading]);
+
     return (
-        <LoaderDiv className={`${styles.main}`}>
+        <LoaderDiv className={`${styles.main} ${getOut ? styles.out : ""}`} style={{ display }} onAnimationEnd={handleAnimationEnd}>
             <svg className={styles.ip} viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">

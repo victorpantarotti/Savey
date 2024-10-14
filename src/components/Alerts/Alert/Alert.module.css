@@ -1,23 +1,17 @@
 .alert {
     width: 250px;
-    position: fixed;
-    top: 10px;
-    left: 50%;
+    margin-top: 10px;
     transform: translateX(-50%);
     opacity: 0;
     z-index: 2;
     font-size: 16px;
     color: white;
     border-radius: 5px;
-}
-
-.fadeIn {
     animation: fadeIn 0.5s linear forwards;
 }
 
-.fadeOut {
+.out {
     animation: fadeOut 0.5s linear forwards;
-    opacity: 0;
 }
 
 .success {

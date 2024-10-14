@@ -20,6 +20,7 @@ const Button = styled.a`
 const ScrollToTop = () => {
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
+        console.log('click')
         window.scrollTo({
             top: 0, 
             behavior: "smooth"

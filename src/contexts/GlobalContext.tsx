@@ -1,43 +1,39 @@
-import { AlertProps } from "@/components/Alert";
 import React, { createContext, ReactElement, SetStateAction, useState } from "react";
+import { AlertProps } from "@/components/Alerts/Alert";
 
 interface GlobalContextInterface {
-    alertState: AlertStateInterface,
-    setAlertState: React.Dispatch<SetStateAction<AlertStateInterface>>
+    loading: LoadingInterface,
+    setLoading: React.Dispatch<SetStateAction<LoadingInterface>>,
+    alerts: AlertProps[],
+    setAlerts: React.Dispatch<SetStateAction<AlertProps[]>>
 }
 
 interface GlobalProviderProps {
     children: ReactElement
 }
 
-interface AlertStateInterface {
-    currentAlert: AlertProps,
-    newAlert: AlertProps
+interface LoadingInterface {
+    active: boolean,
+    hide: boolean
 }
 
 export const GlobalContext = createContext<GlobalContextInterface>({} as GlobalContextInterface);
 GlobalContext.displayName = "Global";
 
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
-    const [alertState, setAlertState] = useState<AlertStateInterface>({
-        currentAlert: {
-            active: false,
-            type: "success",
-            message: "",
-            time: "",
-            onTimeEnd: () => {}
-        },
-        newAlert: {
-            active: false,
-            type: "success",
-            message: "",
-            time: "",
-            onTimeEnd: () => {}
-        },
+    const [loading, setLoading] = useState<LoadingInterface>({
+        active: false,
+        hide: false
     });
-
+    const [alerts, setAlerts] = useState<AlertProps[]>([]);
+    
     return (
-        <GlobalContext.Provider value={{ alertState, setAlertState }}>
+        <GlobalContext.Provider value={{ 
+            loading, 
+            setLoading,
+            alerts,
+            setAlerts
+        }}>
             {children}
         </GlobalContext.Provider>
     )

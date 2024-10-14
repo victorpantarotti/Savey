@@ -8,51 +8,45 @@ import { usePreferencesContext } from '@/hooks/usePreferencesContext';
 import { useVideosContext } from '@/hooks/useVideosContext';
 
 import styles from "./Header.module.css";
-import { useGlobalContext } from '@/hooks/useGlobalContext';
 
 const Header = () => {
   const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
   const { favoriteListState, setFavoriteListState, searchState, setSearchState, addVideoState, setAddVideoState } = useVideosContext();
-  const { createAlert } = useGlobalContext();
 
   const items: MenuProps['items'] = [
     {
-      key: '1',
+      key: 'add-video',
+      label: (
+        <DropdownButton icon={<CgMathPlus />} text="Adicionar vídeo" onClick={() => setAddVideoState(!addVideoState)} />
+      ),
+    },
+    {
+      key: 'favorite',
       label: (
         <DropdownButton icon={favoriteListState ? <FaHeart /> : <FaRegHeart />} text="Favoritos" onClick={() => setFavoriteListState(!favoriteListState)} />
       ),
     },
     {
-      key: '2',
+      key: 'search',
       label: (
         <DropdownButton icon={<CgSearch />} text="Buscar" onClick={() => setSearchState(!searchState)} />
       ),
     },
     {
-      key: '3',
+      key: 'change-theme',
       label: (
         <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
       ),
     },
     {
-      key: '4',
+      key: 'change-user',
       label: (
         <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => setLoginModalState({
           active: true,
           closable: true
         })} />
       ),
-    },
-    {
-      key: '5',
-      label: (
-        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => createAlert({
-          type: "success",
-          message: "teste do alerta",
-          duration: "5s"
-        })} />
-      ),
-    },
+    }
   ];
 
   return (

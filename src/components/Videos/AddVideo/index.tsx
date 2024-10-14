@@ -7,11 +7,10 @@ import InputElement from "@/components/InputElement";
 import { CgMathPlus } from "react-icons/cg";
 
 const AddVideo = () => {
-    const { addVideoState, setAddVideoState, videoData, setVideoData } = useVideosContext();
+    const { addVideoState, setAddVideoState, addVideo } = useVideosContext();
     const [inputState, setInputState] = useState("");
     
     useEffect(() => setInputState(""), []);
-    useEffect(() => setInputState(""), [videoData]);
 
     const handleCancel = () => setAddVideoState(false);
 
@@ -19,7 +18,7 @@ const AddVideo = () => {
         if (inputState === null || !inputState) return;
         const { valid, id, lastTime } = utils.isYoutubeURL(inputState);
 
-        if (valid) return setVideoData({ id, lastTime });
+        if (valid) return addVideo(id, lastTime);
         return;
     };
 

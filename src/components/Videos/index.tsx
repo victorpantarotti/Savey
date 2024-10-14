@@ -34,7 +34,7 @@ const NoVideos = styled.p`
 
 const Videos = () => {
     const { videos, favoriteListState, getFavoriteList, filter, filterItems } = useVideosContext();
-    const { showLoading } = useGlobalContext();
+    const { loading, showLoading } = useGlobalContext();
     const [stats, setStats] = useState({
         amount: 0,
         totalTime: "0:00:00"
@@ -59,7 +59,7 @@ const Videos = () => {
             totalTime: utils.sumTime(times)
         });
 
-        showLoading("hide");
+        if (loading.active) showLoading("hide");
     }, [videos, favoriteListState, filter]);
 
     return (

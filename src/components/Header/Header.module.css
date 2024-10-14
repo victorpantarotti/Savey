@@ -26,7 +26,10 @@
     list-style: none;
 }
 
+.addVdDropdown { display: none; }
+
 @media screen and (max-width: 860px) {
     .liAddVideo { display: none; }
+    .addVdDropdown { display: block; }
     .menu { margin-left: 0; }
 }

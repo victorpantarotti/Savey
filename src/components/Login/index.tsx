@@ -11,7 +11,7 @@ const Login = () => {
     const { loginModalState, setLoginModalState, changeUser } = usePreferencesContext();
 
     const loginAction = () => {
-        if (!inputState) return alert('escreve algo ae');
+        if (!inputState) return;
         changeUser(inputState);
         setInputState("");
     };

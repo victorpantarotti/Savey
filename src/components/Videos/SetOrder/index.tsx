@@ -14,7 +14,7 @@ const Warning = styled.p`
 `;
 
 const SetOrder = () => {
-    const { videos, customOrder, setCustomOrder, changeVideosOrder } = useVideosContext();
+    const { videos, customOrder, setCustomOrder, changeVideosOrder, changeFavoriteVideosOrder, favoriteListState, getFavoriteList } = useVideosContext();
     const [inputState, setInputState] = useState("");
 
     const handleCancel = () => setCustomOrder({
@@ -24,11 +24,22 @@ const SetOrder = () => {
 
     const setOrder = () => {
         if (inputState === null || !inputState) return;
+
+        if (favoriteListState) {
+            if (Number(inputState) >= 0 && Number(inputState) < getFavoriteList().length) {
+                setCustomOrder({ active: false, video: {} as VideosObject});
+                setInputState("");
+                return changeFavoriteVideosOrder(customOrder.video.favoriteOrder, Number(inputState));
+            }
+            return;
+        }
+
         if (Number(inputState) >= 0 && Number(inputState) < videos.length) {
             setCustomOrder({ active: false, video: {} as VideosObject});
             setInputState("");
             return changeVideosOrder(customOrder.video.order, Number(inputState));
         }
+
         return;
     };
 

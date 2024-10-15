@@ -3,11 +3,6 @@ import { FilterInterface, VideosContext, VideosObject } from "@/contexts/VideosC
 import utils from "@/utils";
 import { useGlobalContext } from "./useGlobalContext";
 
-interface VideoDataInterface {
-    id: string,
-    lastTime: string
-}
-
 export const useVideosContext = () => {
     const { videos, setVideos, favoriteListState, setFavoriteListState, timestampState, setTimestampState, customOrder, setCustomOrder, filter, setFilter, searchState, setSearchState, addVideoState, setAddVideoState } = useContext(VideosContext);
     const { createAlert } = useGlobalContext();
@@ -154,8 +149,8 @@ export const useVideosContext = () => {
 
     const remFavorite = (video: VideosObject) => {
         setVideos(videos.map((v) => {
-            if (v.id === video.id) return { ...v, favorite: false, favoriteOrder: 0 };
-            if (v.favoriteOrder > video.favoriteOrder) return { ...v, favoriteOrder: v.favoriteOrder-- };
+            if (v.id === video.id) return { ...v, favorite: false, favoriteOrder: -1 };
+            if (v.favoriteOrder > video.favoriteOrder) return { ...v, favoriteOrder: v.favoriteOrder - 1 };
             return { ...v };
         }));
     };
@@ -182,6 +177,7 @@ export const useVideosContext = () => {
     
     return {
         videos,
+        setVideos,
         favoriteListState,
         setFavoriteListState,
         timestampState,

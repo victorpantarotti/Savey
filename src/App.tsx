@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
 import { useGlobalContext } from './hooks/useGlobalContext';
+import { useVideosContext } from './hooks/useVideosContext';
+import { usePreferencesContext } from './hooks/usePreferencesContext';
+import { getDatabase, onValue, ref } from 'firebase/database';
+import firebaseConfig from './utils/initDatabase';
+import utils from './utils';
 
 import { ConfigProvider } from 'antd';
 import Loader from './components/Loader';
@@ -38,9 +43,26 @@ const AppDiv = styled.div`
 `;
 
 function App() {
+  const { user } = usePreferencesContext();
   const { showLoading } = useGlobalContext();
+  const { setVideos } = useVideosContext();
+  const db = getDatabase(firebaseConfig);
 
   useEffect(() => showLoading("reset"), []);
+
+  // realtime DB update
+  useEffect(() => {
+    if (user) {
+      onValue(ref(db, user), (snap) => {
+        if (snap.exists()) {
+          const array = utils.objectToArray(snap.val());
+          const sortedArray = array.sort((a, b) => a.order - b.order);
+          return setVideos(sortedArray);
+        }
+        return setVideos([]); 
+      });
+    }
+  }, []);
 
   return (
     <ConfigProvider theme={AntDTheme}>

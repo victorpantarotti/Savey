@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, SetStateAction, useEffect, useState
 import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 import { useGlobalContext } from "@/hooks/useGlobalContext";
 import firebaseConfig from "@/utils/initDatabase";
-import { get, getDatabase, ref } from "firebase/database";
+import { get, getDatabase, ref, set } from "firebase/database";
 import utils from "@/utils/index";
 
 export interface VideosObject {
@@ -53,7 +53,7 @@ VideosContext.displayName = "Videos";
 
 export const VideosProvider = ({ children }: VideosProviderProps) => {
     const { user } = usePreferencesContext();
-    const { showLoading } = useGlobalContext();
+    const { showLoading, createAlert } = useGlobalContext();
     
     const db = getDatabase(firebaseConfig);
     const [videos, setVideos] = useState<Array<VideosObject>>([]);
@@ -87,6 +87,20 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
             });
         }
     }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            set(ref(db, user), videos)
+            .catch((err) => {
+                console.error(err);
+                return createAlert({
+                    type: "fail",
+                    message: "Algo deu errado!",
+                    duration: "8s"
+                });
+            });
+        }
+    }, [videos]);
 
     return (
         <VideosContext.Provider value={{ 

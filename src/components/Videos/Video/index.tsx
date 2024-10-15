@@ -29,7 +29,7 @@ const Video = ({ video }: VideoProps) => {
                 changeVideosOrder(order, order - 1);
                 if (favoriteListState) changeFavoriteVideosOrder(favoriteOrder, favoriteOrder - 1);
                 setClickTimeout(null);
-            }, 150);
+            }, 200);
             setClickTimeout(timeout);
         }
     };

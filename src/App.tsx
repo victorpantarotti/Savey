@@ -72,7 +72,7 @@ function App() {
   // realtime DB update
   useEffect(() => {
     if (user) {
-      onValue(ref(db, user), (snap) => {
+      const event = onValue(ref(db, user), (snap) => {
         if (snap.exists()) {
           const array = utils.objectToArray(snap.val());
           const sortedArray = array.sort((a, b) => a.order - b.order);
@@ -80,8 +80,10 @@ function App() {
         }
         return setVideos([]); 
       });
+
+      return () => event();
     }
-  }, []);
+  }, [user]);
 
   return (
     <ConfigProvider theme={AntDTheme}>

@@ -75,23 +75,30 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const [addVideoState, setAddVideoState] = useState(false);
     const [isVideosLoaded, setIsVideosLoaded] = useState(false);
 
+    const getVideos = () => get(ref(db, user)).then(async (snap) => {
+        if (snap.exists()) {
+            const array = utils.objectToArray(snap.val());
+            const sortedArray = array.sort((a, b) => a.order - b.order);
+            
+            setIsVideosLoaded(true);
+            return setVideos(sortedArray);
+        }
+        setIsVideosLoaded(true);
+        return setVideos([]);
+    });
+
     useEffect(() => {
         showLoading("show");
 
-        if (user) {
-            get(ref(db, user)).then(async (snap) => {
-                if (snap.exists()) {
-                    const array = utils.objectToArray(snap.val());
-                    const sortedArray = array.sort((a, b) => a.order - b.order);
-                    
-                    setIsVideosLoaded(true);
-                    return setVideos(sortedArray);
-                }
-                setIsVideosLoaded(true);
-                return setVideos([]);
-            });
-        }
+        if (user) getVideos();
     }, [user]);
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', getVideos);
+        return () => {
+            window.removeEventListener('beforeunload', getVideos);
+        }
+    }, []);
 
     useEffect(() => {
         if (user) {

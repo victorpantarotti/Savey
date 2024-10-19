@@ -17,6 +17,11 @@ interface LoadingInterface {
     hide: boolean
 }
 
+export interface AddVideoProps {
+    id: string, 
+    lastTime: string
+}
+
 export const GlobalContext = createContext<GlobalContextInterface>({} as GlobalContextInterface);
 GlobalContext.displayName = "Global";
 

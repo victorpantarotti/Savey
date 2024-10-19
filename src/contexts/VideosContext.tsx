@@ -41,7 +41,8 @@ interface VideosContextInterface {
     searchState: boolean,
     setSearchState: React.Dispatch<SetStateAction<boolean>>,
     addVideoState: boolean,
-    setAddVideoState: React.Dispatch<SetStateAction<boolean>>
+    setAddVideoState: React.Dispatch<SetStateAction<boolean>>,
+    isVideosLoaded: boolean
 }
 
 interface VideosProviderProps {
@@ -56,7 +57,7 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const { showLoading, createAlert } = useGlobalContext();
     
     const db = getDatabase(firebaseConfig);
-    const [videos, setVideos] = useState<Array<VideosObject>>([]);
+    const [videos, setVideos] = useState<VideosObject[]>([]);
     const [favoriteListState, setFavoriteListState] = useState(false);
     const [timestampState, setTimestampState] = useState<StateInferface>({
         active: false,
@@ -72,6 +73,7 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     });
     const [searchState, setSearchState] = useState(false);
     const [addVideoState, setAddVideoState] = useState(false);
+    const [isVideosLoaded, setIsVideosLoaded] = useState(false);
 
     useEffect(() => {
         showLoading("show");
@@ -81,8 +83,11 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
                 if (snap.exists()) {
                     const array = utils.objectToArray(snap.val());
                     const sortedArray = array.sort((a, b) => a.order - b.order);
+                    
+                    setIsVideosLoaded(true);
                     return setVideos(sortedArray);
                 }
+                setIsVideosLoaded(true);
                 return setVideos([]);
             });
         }
@@ -117,7 +122,8 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
             searchState,
             setSearchState,
             addVideoState,
-            setAddVideoState
+            setAddVideoState,
+            isVideosLoaded
         }}>
             {children}
         </VideosContext.Provider>

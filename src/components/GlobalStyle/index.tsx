@@ -1,39 +1,13 @@
 import { createGlobalStyle } from "styled-components";
-import { usePreferencesContext } from "@/hooks/usePreferencesContext";
 import { useGlobalContext } from "@/hooks/useGlobalContext";
 
 import Sora from "./fonts/Sora.ttf";
 import AmsterdamTwo from "./fonts/amsterdam-two.ttf";
 
-interface ThemeStylesInterface {
-    backgroundColor: string,
-    textColor: string,
-    boxColor: string,
-    boxShadowColor: string
-}
-
 import './normalize.css';
 
 const GlobalStyle = () => {
-    const { theme } = usePreferencesContext();
     const { loading } = useGlobalContext();
-
-    const themeStyles: Record<string, ThemeStylesInterface> = {
-        "dark": {
-            "backgroundColor": "#212121",
-            "textColor": "white",
-            "boxColor": "#333232",
-            "boxShadowColor": "rgba(255, 255, 255, 0.30)"
-        },
-        "light": {
-            "backgroundColor": "#DAE3DC",
-            "textColor": "black",
-            "boxColor": "#BBC4BD",
-            "boxShadowColor": "rgba(0, 0, 0, 1)"
-        }
-    };
-
-    const currentTheme = themeStyles[theme as keyof object];
 
     const Styled = createGlobalStyle`
         @font-face {
@@ -51,10 +25,17 @@ const GlobalStyle = () => {
         }
 
         :root {
-            --backgroundColor: ${currentTheme.backgroundColor};
-            --textColor: ${currentTheme.textColor};
-            --boxColor: ${currentTheme.boxColor};
-            --boxShadowColor: ${currentTheme.boxShadowColor};
+            --backgroundColor: #212121;
+            --textColor: white;
+            --boxColor: #333232;
+            --boxShadowColor: rgba(255, 255, 255, 0.30);
+        }
+
+        [data-theme="light"] {
+            --backgroundColor: #DAE3DC;
+            --textColor: black;
+            --boxColor: #BBC4BD;
+            --boxShadowColor: rgba(0, 0, 0, 1);
         }
 
         html, body { height: 100%; }

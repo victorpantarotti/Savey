@@ -44,7 +44,7 @@ const AppDiv = styled.div`
 `;
 
 function App() {
-  const { user } = usePreferencesContext();
+  const { user, theme } = usePreferencesContext();
   const { showLoading } = useGlobalContext();
   const { setVideos, addVideo, isVideosLoaded } = useVideosContext();
   const db = getDatabase(firebaseConfig);
@@ -84,6 +84,11 @@ function App() {
       return () => event();
     }
   }, [user]);
+
+  // theme switcher
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+  }, [theme]);
 
   return (
     <ConfigProvider theme={AntDTheme}>

@@ -29,7 +29,7 @@ const SetOrder = () => {
             if (Number(inputState) >= 0 && Number(inputState) < getFavoriteList().length) {
                 setCustomOrder({ active: false, video: {} as VideosObject});
                 setInputState("");
-                return changeFavoriteVideosOrder(customOrder.video.favoriteOrder, Number(inputState));
+                return changeFavoriteVideosOrder(customOrder.video.id, customOrder.video.favoriteOrder, Number(inputState));
             }
             return;
         }
@@ -37,7 +37,7 @@ const SetOrder = () => {
         if (Number(inputState) >= 0 && Number(inputState) < videos.length) {
             setCustomOrder({ active: false, video: {} as VideosObject});
             setInputState("");
-            return changeVideosOrder(customOrder.video.order, Number(inputState));
+            return changeVideosOrder(customOrder.video.id, customOrder.video.order, Number(inputState));
         }
 
         return;

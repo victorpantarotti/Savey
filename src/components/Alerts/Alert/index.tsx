@@ -18,7 +18,7 @@ const AlertContainer = styled.div`
     position: relative;
     display: flex;
     gap: 5px;
-    padding: 12px 12px 6px 12px;
+    padding: 12px 18px 6px 12px;
 `
 
 const Alert = ({ id, type, message, duration }: AlertProps) => {

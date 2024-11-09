@@ -13,6 +13,7 @@ const Video = ({ video }: VideoProps) => {
     const { channel, favorite, id, lastTime, thumb, time, title, order, favoriteOrder } = video;
     const { changeVideosOrder, changeFavoriteVideosOrder, deleteVideo, favoriteAction, favoriteListState, setTimestampState, setCustomOrder } = useVideosContext();
     const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
+    let url = `https://youtube.com/watch?v=${id}&t=${lastTime}`;
 
     const handleArrowUp = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -26,8 +27,8 @@ const Video = ({ video }: VideoProps) => {
             });
         } else {
             const timeout = setTimeout(() => { // single click
-                changeVideosOrder(order, order - 1);
-                if (favoriteListState) changeFavoriteVideosOrder(favoriteOrder, favoriteOrder - 1);
+                changeVideosOrder(id, order, order - 1);
+                if (favoriteListState) changeFavoriteVideosOrder(id, favoriteOrder, favoriteOrder - 1);
                 setClickTimeout(null);
             }, 200);
             setClickTimeout(timeout);
@@ -37,7 +38,7 @@ const Video = ({ video }: VideoProps) => {
     return (
         <div className={styles.video}>
             <p className={styles.order}>{favoriteListState ? favoriteOrder : order}</p>
-            <a href={`https://youtube.com/watch?v=${id}`} target="_blank" className={styles.thumb}>
+            <a href={url} target="_blank" className={styles.thumb}>
                 <img src={thumb} alt={title} />
             </a>
             <div className={styles.container}>
@@ -53,7 +54,7 @@ const Video = ({ video }: VideoProps) => {
                 <a onClick={handleArrowUp}>
                     <FaArrowUp />
                 </a>
-                <a href={`https://youtube.com/watch?v=${id}&t=${lastTime}`} target="_blank">
+                <a href={url} target="_blank">
                     <FaPlay />
                 </a>
                 <a onClick={(e) => {
@@ -64,8 +65,8 @@ const Video = ({ video }: VideoProps) => {
                 </a>
                 <a onClick={(e) => {
                     e.preventDefault();
-                    changeVideosOrder(order, order + 1);
-                    if (favoriteListState) changeFavoriteVideosOrder(favoriteOrder, favoriteOrder + 1);
+                    changeVideosOrder(id, order, order + 1);
+                    if (favoriteListState) changeFavoriteVideosOrder(id, favoriteOrder, favoriteOrder + 1);
                 }}>
                     <FaArrowDown />
                 </a>

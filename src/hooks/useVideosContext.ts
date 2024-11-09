@@ -8,11 +8,11 @@ export const useVideosContext = () => {
     const { videos, setVideos, favoriteListState, setFavoriteListState, timestampState, setTimestampState, customOrder, setCustomOrder, filter, setFilter, searchState, setSearchState, addVideoState, setAddVideoState, isVideosLoaded } = useContext(VideosContext);
     const { createAlert } = useGlobalContext();
 
-    const changeVideosOrder = (currentPos: number, newPos: number) => {
+    const changeVideosOrder = (id: string, currentPos: number, newPos: number) => {
         if (newPos >= videos.length || newPos < 0) return;
 
         const newArray = videos.map((video) => {
-            if (video.order === currentPos) {
+            if (video.id === id && video.order === currentPos) {
                 return { ...video, order: newPos };
             }
 
@@ -34,12 +34,12 @@ export const useVideosContext = () => {
         return setVideos(newArray); 
     };
 
-    const changeFavoriteVideosOrder = (currentPos: number, newPos: number) => {
+    const changeFavoriteVideosOrder = (id: string, currentPos: number, newPos: number) => {
         if (newPos >= videos.filter((v) => v.favorite).length || newPos < 0) return;
 
         const newArray = videos.map((video) => {
             if (video.favorite) {
-                if (video.favoriteOrder === currentPos) {
+                if (video.id === id, video.favoriteOrder === currentPos) {
                     return { ...video, favoriteOrder: newPos };
                 }
     
@@ -66,6 +66,23 @@ export const useVideosContext = () => {
         const intentTimeoutDelay = 2000;
 
         if (videos && videos.some((video) => video.id === id)) {
+            if (lastTime) {
+                setVideos(videos.map((v) => {
+                    if (v.id === videos.find((video) => video.id === id)!.id) return { 
+                        ...v, 
+                        lastTime: utils.convertDurationToTime(utils.convertYTDuration(lastTime))
+                    };
+                    return { ...v };
+                }));
+
+                if (addVideoState === true) setAddVideoState(false);
+                return createAlert({
+                    type: "success",
+                    message: "O tempo que você parou foi atualizado!",
+                    duration: "8s"
+                });
+            }
+
             if (isIntent) setTimeout(() => SendIntent.finish(), intentTimeoutDelay);
 
             return createAlert({
@@ -180,14 +197,58 @@ export const useVideosContext = () => {
     const filterItems = ({ filter }: FilterInterface) => {
         let list = favoriteListState ? getFavoriteList() : videos;
 
-        if (utils.checkTimeFormat(filter)) return list.filter((video) => {
-            return utils.compareTimes(video.time, filter);
+        const timeFilters: { operator: ">" | "<", seconds: number }[] = [];
+        const keywords: string[] = [];
+    
+        const timeRegex = /([<>])(\d+h)?(\d+m)?(\d+s)?/g;
+        const keywordRegex = /\b(?!\d+[hms])[^\s<>]+/g;
+
+        let match;
+        while ((match = timeRegex.exec(filter)) !== null) {
+            const [, operator, h, m, s] = match;
+            const hours = h ? parseInt(h.replace("h", "")) : 0;
+            const minutes = m ? parseInt(m.replace("m", "")) : 0;
+            const seconds = s ? parseInt(s.replace("s", "")) : 0;
+
+            const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            timeFilters.push({ operator: operator as ">" | "<", seconds: totalSeconds });
+        }
+
+        const keywordMatches = filter.match(keywordRegex);
+        if (keywordMatches) {
+            keywords.push(...keywordMatches);
+        }
+
+        if (timeFilters.length === 0 && keywords.length === 0) {
+            return list;
+        }
+
+        const filteredByTime = list.filter((video) => {
+            const videoTime = utils.parseTimeToSeconds(video.time);
+
+            if (timeFilters.length === 0) return true;
+
+            return timeFilters.every((t) => {
+                if (t.operator === ">") return videoTime >= t.seconds;
+                if (t.operator === "<") return videoTime <= t.seconds;
+                return false;
+            });
         });
-        
-        return list.filter((video) => {
-            return video.title.toLowerCase().includes(filter.toLowerCase()) 
-                || video.channel.toLowerCase().includes(filter.toLowerCase()); 
+
+        const filteredByKeywords = filteredByTime.filter((video) => {
+            if (keywords.length === 0) return true;
+
+            return keywords.every((keyword) => {
+                if (
+                    video.title.toLowerCase().includes(keyword.toLowerCase()) 
+                    || video.channel.toLowerCase().includes(keyword.toLowerCase())
+                ) return true;
+
+                return false;
+            });
         });
+
+        return filteredByKeywords;
     };
     
     return {

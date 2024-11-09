@@ -11,7 +11,7 @@ interface InputElementProps {
 
 const InputElement = ({ placeholder, prefix = null, onEnterPress, inputState, setInputState }: InputElementProps) => {
     return (
-        <Input 
+        <Input
             placeholder={placeholder} 
             prefix={prefix}
             value={inputState}

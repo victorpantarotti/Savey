@@ -2,6 +2,7 @@
 # Savey
 
 A Simple Website and Android App to save Youtube Videos to watch later!
+##### The actual app/website is in Brazillian Portuguese*
 
 ![Savey Example Screenshot](Savey-ExampleScreenshot.png)
 
@@ -13,7 +14,8 @@ A Simple Website and Android App to save Youtube Videos to watch later!
 - Save and set the exact time you stopped watching;
 - Search by duration, title and channel;
 - Favorites list;
-- Theme changer.
+- Shortcut to add videos (CTRL + Space);
+- Theme switcher.
 <br />
 
 ## How to install it:

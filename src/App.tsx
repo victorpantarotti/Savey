@@ -46,12 +46,13 @@ const AppDiv = styled.div`
 function App() {
   const { user, theme } = usePreferencesContext();
   const { showLoading } = useGlobalContext();
-  const { setVideos, addVideo, isVideosLoaded } = useVideosContext();
+  const { setVideos, addVideo, isVideosLoaded, setAddVideoState } = useVideosContext();
   const db = getDatabase(firebaseConfig);
   const [intent, setIntent] = useState<Intent>({});
 
   useEffect(() => showLoading("reset"), []);
 
+  // android share
   SendIntent.checkSendIntentReceived().then((result) => {
     if (result && result.url) {
       const { valid } = utils.isYoutubeURL(result.url);
@@ -89,6 +90,21 @@ function App() {
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // add video shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.code === 'Space') {
+        e.preventDefault();
+        setAddVideoState((state) => !state);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <ConfigProvider theme={AntDTheme}>

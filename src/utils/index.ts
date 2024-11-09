@@ -39,17 +39,17 @@ function parseTimeToSeconds(time: string): number {
   return seconds;
 }
 
-function formatSecondsToTime(totalSeconds: number): string {
+function formatSecondsToTime(totalSeconds: number, showHour?: boolean): string {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${showHour ? `${hours}:` : ""}${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 function sumTime(times: string[]): string {
   const totalSeconds = times.reduce((acc, time) => acc + parseTimeToSeconds(time), 0);
-  return formatSecondsToTime(totalSeconds);
+  return formatSecondsToTime(totalSeconds, true);
 }
 
 function parseTimeString(time: string): number {
@@ -98,37 +98,65 @@ function isYoutubeURL(url: string): IsYoutubeURLInterface {
 }
 
 function convertYTDuration(duration: string): string {
-  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  // Check if duration is in seconds-only format (e.g., "729s" or "729")
+  if (/^\d+s?$/.test(duration)) {
+    const totalSeconds = parseInt(duration.replace(/\D/g, ''), 10);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
 
+    // Format with leading zeros as necessary
+    const hoursPart = hours > 0 ? `${hours}:` : ''; // Only include hours if greater than 0
+    const minutesPart = `${minutes.toString().padStart(2, '0')}`;
+    const secondsPart = `${seconds.toString().padStart(2, '0')}`;
+
+    return `${hoursPart}${minutesPart}:${secondsPart}`;
+  }
+
+  // Otherwise, assume the duration is in the "PT#H#M#S" format
+  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   if (!match) return '00:00';
 
-  const [hoursPart, minutesPart, secondsPart] = match.slice(1).map((x) => {
-    return x ? x.replace(/\D/, '') : '0'; // Default to '0' if null
-  });
-
+  const [hoursPart, minutesPart, secondsPart] = match.slice(1).map((x) => (x ? x.replace(/\D/, '') : '0'));
   const hours = parseInt(hoursPart) || 0;
   const minutes = parseInt(minutesPart) || 0;
   const seconds = parseInt(secondsPart) || 0;
 
-  const date = new Date(0);
-  date.setSeconds(hours * 3600 + minutes * 60 + seconds);
-  const format = date.toISOString().substring(11, 19);
-  const formatSplit = format.split(':');
+  // Format with leading zeros and build the final time string
+  const timeParts = [];
+  if (hours > 0) timeParts.push(hours.toString()); // Include hours only if greater than 0
+  timeParts.push(minutes.toString().padStart(2, '0'));
+  timeParts.push(seconds.toString().padStart(2, '0'));
+
+  return timeParts.join(':');
+}
+
+function convertDurationToTime(duration: string): string {
+  // Split the duration into hours, minutes, and seconds
+  const parts = duration.split(':').map((part) => parseInt(part, 10) || 0);
   
-  let time = '';
+  // Handle different formats based on the number of parts
+  const [hours, minutes, seconds] = parts.length === 3
+    ? parts
+    : [0, parts[0], parts[1]]; // If two parts, assume [0, minutes, seconds]
 
-  if (formatSplit[0] !== '00') time += `${formatSplit[0]}:`; // hr
-  time += `${formatSplit[1]}:${formatSplit[2]}`; // min + sec
+  // Construct the formatted string, omitting zero values
+  let formattedDuration = '';
+  if (hours > 0) formattedDuration += `${hours}h`;
+  if (minutes > 0) formattedDuration += `${minutes}m`;
+  if (seconds > 0 || formattedDuration === '') formattedDuration += `${seconds}s`; // Include "0s" if all are zero
 
-  return time;
+  return formattedDuration;
 }
 
 export default {
   arrayToObject,
   objectToArray,
   checkTimeFormat,
+  parseTimeToSeconds,
   sumTime,
   compareTimes,
   isYoutubeURL,
-  convertYTDuration
+  convertYTDuration,
+  convertDurationToTime
 };

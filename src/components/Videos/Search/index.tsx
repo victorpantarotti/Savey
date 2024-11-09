@@ -40,7 +40,8 @@ const Search = () => {
             onCancel={handleCancel}
             footer={null}
         >
-            <Warning>Você pode buscar por título, nome do canal ou duração!</Warning>
+            <Warning>Atalhos: {">"}: maior que; {"<"}: menor que.</Warning>
+            <Warning>Você pode utilizar estes atalhos ao mesmo tempo enquanto pesquisa pelo título e nome do canal! Não existe ordem específica para colocá-los! Ex: {`">10m jogos"`}</Warning>
             <InputElement
                 placeholder="Digite sua pesquisa" 
                 prefix={<CgSearch />} 

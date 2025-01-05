@@ -1,9 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { useVideosContext } from "@/hooks/useVideosContext";
-import { useEffect, useState } from "react";
 
-import { Modal, Button } from "antd";
-import InputElement from "@/components/InputElement";
+import { Modal, Button, InputRef } from "antd";
 import { CgSearch } from "react-icons/cg";
+import InputElement from "@/components/InputElement";
 
 import styled from "styled-components";
 
@@ -15,8 +15,9 @@ const Warning = styled.p`
 const Search = () => {
     const { searchState, setSearchState, filter, setFilter } = useVideosContext();
     const [inputState, setInputState] = useState(filter.filter);
+    const inputRef = useRef<InputRef>(null);
 
-    useEffect(() => search(), [inputState])
+    useEffect(() => search(), [inputState]);
     
     const handleCancel = () => setSearchState(false);
 
@@ -39,6 +40,7 @@ const Search = () => {
             open={searchState}
             onCancel={handleCancel}
             footer={null}
+            afterOpenChange={() => inputRef.current?.focus()}
         >
             <Warning>Atalhos: {">"}: maior que; {"<"}: menor que.</Warning>
             <Warning>Você pode utilizar estes atalhos ao mesmo tempo enquanto pesquisa pelo título e nome do canal! Não existe ordem específica para colocá-los! Ex: {`">10m jogos"`}</Warning>
@@ -47,7 +49,8 @@ const Search = () => {
                 prefix={<CgSearch />} 
                 onEnterPress={() => search(true)}
                 inputState={inputState}
-                setInputState={setInputState} 
+                setInputState={setInputState}
+                ref={inputRef}
             />
             <Button type="primary" style={{ marginTop: "8px" }} onClick={() => search(true)}>Buscar</Button>
         </Modal>

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useVideosContext } from "@/hooks/useVideosContext";
 import { isBrowser } from 'react-device-detect';
 import utils from "@/utils";
 
-import { Modal, Button } from "antd";
+import { Modal, Button, InputRef } from "antd";
 import InputElement from "@/components/InputElement";
 import { CgMathPlus } from "react-icons/cg";
 
@@ -17,6 +17,7 @@ const Warning = styled.p`
 const AddVideo = () => {
     const { addVideoState, setAddVideoState, addVideo } = useVideosContext();
     const [inputState, setInputState] = useState("");
+    const inputRef = useRef<InputRef>(null);
     
     useEffect(() => setInputState(""), []);
 
@@ -39,6 +40,7 @@ const AddVideo = () => {
             open={addVideoState}
             onCancel={handleCancel}
             footer={null}
+            afterOpenChange={() => inputRef.current?.focus()}
         >
             {isBrowser && <Warning>Você também pode acessar essa tela usando: CTRL + Espaço!</Warning>}
             <InputElement
@@ -47,6 +49,7 @@ const AddVideo = () => {
                 onEnterPress={handleAddVideo}
                 inputState={inputState}
                 setInputState={setInputState}
+                ref={inputRef}
             />
             <Button type="primary" style={{ marginTop: "8px" }} onClick={handleAddVideo}>Adicionar</Button>
         </Modal>

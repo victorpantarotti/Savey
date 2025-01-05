@@ -1,8 +1,8 @@
+import { useRef, useState } from "react";
 import { useVideosContext } from "@/hooks/useVideosContext";
 import { VideosObject } from "@/contexts/VideosContext";
-import { useState } from "react";
 
-import { Modal, Button } from "antd";
+import { Modal, Button, InputRef } from "antd";
 import { FaList } from "react-icons/fa";
 import InputElement from "@/components/InputElement";
 
@@ -16,6 +16,7 @@ const Warning = styled.p`
 const SetOrder = () => {
     const { videos, customOrder, setCustomOrder, changeVideosOrder, changeFavoriteVideosOrder, favoriteListState, getFavoriteList } = useVideosContext();
     const [inputState, setInputState] = useState("");
+    const inputRef = useRef<InputRef>(null);
 
     const handleCancel = () => setCustomOrder({
         active: false,
@@ -45,10 +46,11 @@ const SetOrder = () => {
 
     return (
         <Modal 
-            title="Posição customizada"
+            title="Posição personalizada"
             open={customOrder.active}
             onCancel={handleCancel}
             footer={null}
+            afterOpenChange={() => inputRef.current?.focus()}
         >
             <Warning>Coloque o seu vídeo na posição que preferir!</Warning>
             <InputElement
@@ -56,7 +58,8 @@ const SetOrder = () => {
                 prefix={<FaList />} 
                 onEnterPress={setOrder}
                 inputState={inputState}
-                setInputState={setInputState} 
+                setInputState={setInputState}
+                ref={inputRef} 
             />
             <Button type="primary" style={{ marginTop: "8px" }} onClick={setOrder}>Salvar</Button>
         </Modal>

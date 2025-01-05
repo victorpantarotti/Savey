@@ -132,21 +132,38 @@ function convertYTDuration(duration: string): string {
 }
 
 function convertDurationToTime(duration: string): string {
-  // Split the duration into hours, minutes, and seconds
-  const parts = duration.split(':').map((part) => parseInt(part, 10) || 0);
-  
-  // Handle different formats based on the number of parts
-  const [hours, minutes, seconds] = parts.length === 3
-    ? parts
-    : [0, parts[0], parts[1]]; // If two parts, assume [0, minutes, seconds]
+  // Regex para identificar "Xh Ym Zs", "Xh Ym", "Ym Zs", "Xs", "Xm" ou apenas números
+  const regex = /(\d+)([hms])/g;
+  let totalSeconds = 0;
+  let match;
 
-  // Construct the formatted string, omitting zero values
+  // Converte todas as unidades para segundos
+  while ((match = regex.exec(duration)) !== null) {
+    const value = parseInt(match[1], 10);
+    const unit = match[2];
+
+    if (unit === "h") totalSeconds += value * 3600; // Horas para segundos
+    else if (unit === "m") totalSeconds += value * 60; // Minutos para segundos
+    else if (unit === "s") totalSeconds += value; // Segundos
+  }
+
+  // Caso seja apenas um número simples, trata como segundos
+  if (/^\d+$/.test(duration)) {
+    totalSeconds += parseInt(duration, 10);
+  }
+
+  // Converte segundos totais para formato legível
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  // Monta a string final omitindo unidades desnecessárias
   let formattedDuration = '';
   if (hours > 0) formattedDuration += `${hours}h`;
   if (minutes > 0) formattedDuration += `${minutes}m`;
-  if (seconds > 0 || formattedDuration === '') formattedDuration += `${seconds}s`; // Include "0s" if all are zero
+  if (seconds > 0 || formattedDuration === '') formattedDuration += `${seconds}s`;
 
-  return formattedDuration;
+  return formattedDuration.trim(); // Remove espaços extras
 }
 
 export default {

@@ -13,7 +13,7 @@ const Video = ({ video }: VideoProps) => {
     const { channel, favorite, id, lastTime, thumb, time, title, order, favoriteOrder } = video;
     const { changeVideosOrder, changeFavoriteVideosOrder, deleteVideo, favoriteAction, favoriteListState, setTimestampState, setCustomOrder } = useVideosContext();
     const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
-    let url = `https://youtube.com/watch?v=${id}&t=${lastTime}`;
+    let url = `https://youtube.com/watch?v=${id}${lastTime ? `&t=${lastTime}` : ""}`;
 
     const handleArrowUp = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -45,7 +45,7 @@ const Video = ({ video }: VideoProps) => {
                 <h3 title={title}>{title}</h3>
                 <h5>{channel} • {time}</h5>
                 {
-                    lastTime !== "0h0m0s"
+                    lastTime
                     ? <h5 className={styles.lastTime}>Você parou em: {lastTime}</h5>
                     : ""
                 }

@@ -1,5 +1,5 @@
-import { ReactElement, SetStateAction } from "react";
-import { Input } from "antd";
+import { forwardRef, ReactElement, SetStateAction } from "react";
+import { Input, InputRef } from "antd";
 
 interface InputElementProps {
     placeholder: string,
@@ -9,7 +9,7 @@ interface InputElementProps {
     setInputState: React.Dispatch<SetStateAction<string>>
 }
 
-const InputElement = ({ placeholder, prefix = null, onEnterPress, inputState, setInputState }: InputElementProps) => {
+const InputElement = forwardRef<InputRef, InputElementProps>(({ placeholder, prefix = null, onEnterPress, inputState, setInputState }, ref) => {
     return (
         <Input
             placeholder={placeholder} 
@@ -17,8 +17,11 @@ const InputElement = ({ placeholder, prefix = null, onEnterPress, inputState, se
             value={inputState}
             onChange={(e) => setInputState(e.target.value)} 
             onKeyDown={(e) => e.keyCode === 13 || e.keyCode === 108 ? onEnterPress() : ""}
+            ref={ref}
         />
     )
-};
+});
+
+InputElement.displayName = "InputElement";
 
 export default InputElement;

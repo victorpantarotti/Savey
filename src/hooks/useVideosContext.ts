@@ -67,10 +67,12 @@ export const useVideosContext = () => {
 
         if (videos && videos.some((video) => video.id === id)) {
             if (lastTime) {
+                const formattedTime = utils.convertDurationToTime(lastTime);
+
                 setVideos(videos.map((v) => {
                     if (v.id === videos.find((video) => video.id === id)!.id) return { 
                         ...v, 
-                        lastTime: utils.convertDurationToTime(utils.convertYTDuration(lastTime))
+                        lastTime: formattedTime === "0s" ? "" : formattedTime
                     };
                     return { ...v };
                 }));
@@ -106,6 +108,8 @@ export const useVideosContext = () => {
                 }
                 
                 const data = await response.json();
+
+                const formattedTime = utils.convertDurationToTime(lastTime);
                 
                 setVideos([
                     ...videos,
@@ -115,7 +119,7 @@ export const useVideosContext = () => {
                         channel: data.items[0].snippet.channelTitle,
                         thumb: data.items[0].snippet.thumbnails.medium.url,
                         time: utils.convertYTDuration(data.items[0].contentDetails.duration),
-                        lastTime: lastTime ? lastTime : "0h0m0s",
+                        lastTime: formattedTime === "0s" ? "" : formattedTime,
                         favorite: false,
                         order: videos.length,
                         favoriteOrder: -1
@@ -148,16 +152,22 @@ export const useVideosContext = () => {
     const deleteVideo = (video: VideosObject) => {
         setVideos(
             videos.filter((v) => v.id !== video.id)
-            .map((v) => {
-                if (v.order > video.order && !v.favorite) return { ...v, order: v.order - 1 };
-                if (v.order > video.order && v.favorite && v.favoriteOrder > video.favoriteOrder) return { ...v, order: v.order - 1, favoriteOrder: v.favoriteOrder - 1 };
-                if (v.favorite && v.favoriteOrder > video.favoriteOrder) return { ...v, favoriteOrder: v.favoriteOrder - 1 };
-                if (v.favorite && v.favoriteOrder < video.favoriteOrder && v.order > video.order) return { ...v, order: v.order - 1 };
+            .map((v, i) => {
+                const checkFavorite = () => {
+                    if (v.favorite) {
+                        if (v.favoriteOrder > video.favoriteOrder) return true;
+                        return false;
+                    }
+                    return false;
+                };
+                const checkedFavorite = checkFavorite();
 
-                return { ...v };
+                const favoriteOrderVerif = v.favoriteOrder - 1 < 0 ? 0 : v.favoriteOrder - 1;
+
+                return { ...v, order: i, favoriteOrder: checkedFavorite ? favoriteOrderVerif : v.favoriteOrder };
             })
         );
-    };
+    };   
 
     const getFavoriteList = () => {
         const filterFavorites = videos.filter((item) => item.favorite && item.favoriteOrder >= 0);
@@ -188,8 +198,11 @@ export const useVideosContext = () => {
     };
 
     const saveTimestamp = (video: VideosObject, timestamp: string) => {
+        const formattedTime = utils.convertDurationToTime(timestamp);
+        const lastTime = formattedTime === "0s" ? "" : formattedTime;
+
         setVideos(videos.map((v) => {
-            if (v.id === video.id) return { ...v, lastTime: timestamp };
+            if (v.id === video.id) return { ...v, lastTime };
             return { ...v };
         }));
     };

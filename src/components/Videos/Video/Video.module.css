@@ -59,19 +59,18 @@
 }
 
 .video .buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
+    display: grid;
+    width: 75%;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 auto 8px auto;
 }
 
 .video .buttons a {
     width: 20%;
-    padding: 8px;
-    text-decoration: none;
     color: var(--textColor);
+    text-decoration: none;
+    justify-self: center;
+    padding: 8px;
 }
 
 .video .buttons a:hover { cursor: pointer; }

@@ -1,16 +1,19 @@
 import type { MenuProps } from 'antd';
 import { Space, Dropdown } from "antd";
-import { CgMenu, CgMathPlus, CgSun, CgMoon, CgProfile, CgSearch } from "react-icons/cg";
+import { CgMenu, CgMathPlus, CgSun, CgMoon, CgSearch } from "react-icons/cg";
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
+import { MdLogout } from 'react-icons/md';
 import DropdownButton from './DropdownButton';
 
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
+import { useLoginContext } from '@/hooks/useLoginContext';
 import { useVideosContext } from '@/hooks/useVideosContext';
 
-import styles from "./Header.module.css";
+import styles from "./Header.module.scss";
 
 const Header = () => {
-  const { theme, changeTheme, setLoginModalState } = usePreferencesContext();
+  const { theme, changeTheme } = usePreferencesContext();
+  const { signOutUser } = useLoginContext();
   const { favoriteListState, setFavoriteListState, searchState, setSearchState, addVideoState, setAddVideoState } = useVideosContext();
 
   const items: MenuProps['items'] = [
@@ -39,12 +42,9 @@ const Header = () => {
       ),
     },
     {
-      key: 'change-user',
+      key: 'user-logout',
       label: (
-        <DropdownButton icon={<CgProfile />} text="Mudar Usuário" onClick={() => setLoginModalState({
-          active: true,
-          closable: true
-        })} />
+        <DropdownButton icon={<MdLogout />} text="Desconectar-se" onClick={() => signOutUser()} />
       ),
     }
   ];

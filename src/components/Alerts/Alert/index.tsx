@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 
-import styles from "./Alert.module.css";
+import styles from "./Alert.module.scss";
 import styled from "styled-components";
 
 export interface AlertProps {

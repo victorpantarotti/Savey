@@ -1,9 +1,9 @@
 import React, { createContext, ReactElement, SetStateAction, useEffect, useState } from "react";
-import { usePreferencesContext } from "@/hooks/usePreferencesContext";
+import { useLoginContext } from "@/hooks/useLoginContext";
 import { useGlobalContext } from "@/hooks/useGlobalContext";
+
 import firebaseConfig from "@/utils/initDatabase";
-import { get, getDatabase, ref, set } from "firebase/database";
-import utils from "@/utils/index";
+import { get, getDatabase, ref, update } from "firebase/database";
 
 export interface VideosObject {
     channel: string,
@@ -53,7 +53,7 @@ export const VideosContext = createContext<VideosContextInterface>({} as VideosC
 VideosContext.displayName = "Videos";
 
 export const VideosProvider = ({ children }: VideosProviderProps) => {
-    const { user } = usePreferencesContext();
+    const { user } = useLoginContext();
     const { showLoading, createAlert } = useGlobalContext();
     
     const db = getDatabase(firebaseConfig);
@@ -75,10 +75,10 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const [addVideoState, setAddVideoState] = useState(false);
     const [isVideosLoaded, setIsVideosLoaded] = useState(false);
 
-    const getVideos = () => get(ref(db, user)).then(async (snap) => {
-        if (snap.exists()) {
-            const array = utils.objectToArray(snap.val());
-            const sortedArray = array.sort((a, b) => a.order - b.order);
+    const getVideos = () => get(ref(db, user?.uuid)).then(async (snap) => {
+        if (snap.exists() && snap.val().videos) {
+            const array = snap.val().videos;
+            const sortedArray = array.sort((a: VideosObject, b: VideosObject) => a.order - b.order);
             
             setIsVideosLoaded(true);
             return setVideos(sortedArray);
@@ -89,8 +89,8 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
 
     useEffect(() => {
         showLoading("show");
-
-        if (user) getVideos();
+        
+        if (user?.uuid) getVideos();
     }, [user]);
 
     useEffect(() => {
@@ -101,8 +101,10 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     }, []);
 
     useEffect(() => {
-        if (user) {
-            set(ref(db, user), videos)
+        if (user?.uuid) {
+            update(ref(db, user.uuid), {
+                videos: videos
+            })
             .catch((err) => {
                 console.error(err);
                 return createAlert({

@@ -7,13 +7,6 @@ import { Modal, Button, InputRef } from "antd";
 import InputElement from "@/components/InputElement";
 import { CgMathPlus } from "react-icons/cg";
 
-import styled from "styled-components";
-
-const Warning = styled.p`
-    margin-top: -10px;
-    font-size: 12px;
-`;
-
 const AddVideo = () => {
     const { addVideoState, setAddVideoState, addVideo } = useVideosContext();
     const [inputState, setInputState] = useState("");
@@ -42,7 +35,7 @@ const AddVideo = () => {
             footer={null}
             afterOpenChange={() => inputRef.current?.focus()}
         >
-            {isBrowser && <Warning>Você também pode acessar essa tela usando: CTRL + Espaço!</Warning>}
+            {isBrowser && <p className="-mt-[10px] text-xs">Você também pode acessar essa tela usando: CTRL + Espaço!</p>}
             <InputElement
                 placeholder="Insira uma URL" 
                 prefix={<CgMathPlus />} 

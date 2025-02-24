@@ -6,13 +6,6 @@ import { Modal, Button, InputRef } from "antd";
 import { FaList } from "react-icons/fa";
 import InputElement from "@/components/InputElement";
 
-import styled from "styled-components";
-
-const Warning = styled.p`
-    margin-top: -10px;
-    font-size: 12px;
-`;
-
 const SetOrder = () => {
     const { videos, customOrder, setCustomOrder, changeVideosOrder, changeFavoriteVideosOrder, favoriteListState, getFavoriteList } = useVideosContext();
     const [inputState, setInputState] = useState("");
@@ -52,7 +45,7 @@ const SetOrder = () => {
             footer={null}
             afterOpenChange={() => inputRef.current?.focus()}
         >
-            <Warning>Coloque o seu vídeo na posição que preferir!</Warning>
+            <p className="-mt-[10px] text-xs">Coloque o seu vídeo na posição que preferir!</p>
             <InputElement
                 placeholder="Digite a nova posição" 
                 prefix={<FaList />} 

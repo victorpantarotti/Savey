@@ -14,7 +14,8 @@ A Simple Website and Android App to save Youtube Videos to watch later!
 - Save and set the exact time you stopped watching;
 - Search by duration, title and channel;
 - Favorites list;
-- Shortcut to add videos (CTRL + Space);
+- Shortcut to add videos (CTRL + Space or CTRL + Q);
+- Shortcut to search (CTRL + K);
 - Theme switcher.
 <br />
 
@@ -37,6 +38,8 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=<YOUR_FIREBASE_MESSAGING_SENDER_ID>
 VITE_FIREBASE_APP_ID=<YOUR_FIREBASE_APP_ID>
 
 VITE_YOUTUBE_API_KEY=<YOUR_YOUTUBE_API_KEY>
+
+VITE_ENCRYPTION_SECRET=<YOUR_ENCRYPTION_SECRET>
 ```
 
 > Finally, in your terminal use:

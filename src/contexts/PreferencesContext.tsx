@@ -1,21 +1,12 @@
 import { createContext, ReactElement, SetStateAction, useEffect, useState } from "react";
 
 interface PreferencesContextInterface {
-    user: string,
-    setUser: React.Dispatch<SetStateAction<string>>,
     theme: string,
-    setTheme: React.Dispatch<SetStateAction<string>>,
-    loginModalState: IloginModalState,
-    setLoginModalState: React.Dispatch<SetStateAction<IloginModalState>>
+    setTheme: React.Dispatch<SetStateAction<string>>
 }
 
 interface PreferencesProviderProps {
     children: ReactElement
-}
-
-interface IloginModalState {
-    active: boolean,
-    closable: boolean
 }
 
 export const PreferencesContext = createContext<PreferencesContextInterface>({} as PreferencesContextInterface);
@@ -32,20 +23,7 @@ const getTheme = () => {
 };
 
 export const PreferencesProvider = ({ children }: PreferencesProviderProps) => {
-    const [user, setUser] = useState(""); 
     const [theme, setTheme] = useState(getTheme);
-    const [loginModalState, setLoginModalState] = useState<IloginModalState>({
-        active: false,
-        closable: false
-    });
-
-    useEffect(() => {
-        const localUser = localStorage.getItem("user");
-        !localUser ? setLoginModalState({
-            active: true,
-            closable: false
-        }) : setUser(localUser);
-    }, [user]);
 
     useEffect(() => {
         const refreshTheme = () => {
@@ -56,7 +34,7 @@ export const PreferencesProvider = ({ children }: PreferencesProviderProps) => {
     }, [theme]);
 
     return (
-        <PreferencesContext.Provider value={{ user, setUser, theme, setTheme, loginModalState, setLoginModalState }}>
+        <PreferencesContext.Provider value={{ theme, setTheme }}>
             {children}
         </PreferencesContext.Provider>
     );

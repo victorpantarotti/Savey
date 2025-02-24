@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from './hooks/useGlobalContext';
+import { useLoginContext } from './hooks/useLoginContext';
 import { useVideosContext } from './hooks/useVideosContext';
 import { usePreferencesContext } from './hooks/usePreferencesContext';
+
 import firebaseConfig from './utils/initDatabase';
 import { getDatabase, onValue, ref } from 'firebase/database';
+
 import { Intent, SendIntent } from "send-intent";
+
+import { VideosObject } from './contexts/VideosContext';
+
 import utils from './utils';
 
 import { ConfigProvider } from 'antd';
@@ -13,10 +19,9 @@ import Alerts from './components/Alerts';
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
 import Login from './components/Login';
+import SignIn from './components/SignIn';
 import Videos from './components/Videos';
 import Footer from './components/Footer';
-
-import styled from 'styled-components';
 
 const AntDTheme = {
   token: {
@@ -35,18 +40,11 @@ const AntDTheme = {
   }
 };
 
-const AppDiv = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--backgroundColor);
-  color: var(--textColor);
-  font-family: "Sora";
-`;
-
 function App() {
-  const { user, theme } = usePreferencesContext();
-  const { showLoading } = useGlobalContext();
-  const { setVideos, addVideo, isVideosLoaded, setAddVideoState } = useVideosContext();
+  const { user } = useLoginContext();
+  const { theme } = usePreferencesContext();
+  const { loading, showLoading } = useGlobalContext();
+  const { setVideos, addVideo, isVideosLoaded, setAddVideoState, setSearchState } = useVideosContext();
   const db = getDatabase(firebaseConfig);
   const [intent, setIntent] = useState<Intent>({});
 
@@ -72,11 +70,11 @@ function App() {
 
   // realtime DB update
   useEffect(() => {
-    if (user) {
-      const event = onValue(ref(db, user), (snap) => {
-        if (snap.exists()) {
-          const array = utils.objectToArray(snap.val());
-          const sortedArray = array.sort((a, b) => a.order - b.order);
+    if (user?.uuid) {
+      const event = onValue(ref(db, user.uuid), (snap) => {
+        if (snap.exists() && snap.val().videos) {
+          const array = snap.val().videos;
+          const sortedArray = array.sort((a: VideosObject, b: VideosObject) => a.order - b.order);
           return setVideos(sortedArray);
         }
         return setVideos([]); 
@@ -94,9 +92,23 @@ function App() {
   // add video shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.code === 'Space') {
+      if (e.ctrlKey) {
         e.preventDefault();
-        setAddVideoState((state) => !state);
+
+        switch (e.code) {
+          case "Space":
+          case "KeyQ":
+            setAddVideoState((state) => !state);
+            break;
+            
+          case "KeyK":
+            setSearchState((state) => !state);
+            break;
+
+          default:
+            break;
+        }
+
       }
     };
 
@@ -108,15 +120,16 @@ function App() {
 
   return (
     <ConfigProvider theme={AntDTheme}>
-      <AppDiv>
+      <main className={`w-full min-h-screen bg-[var(--backgroundColor)] text-[var(--textColor)] font-["Sora"] ${loading.active ? "overflow-y-hidden" : "overflow-y-auto"}`}>
         <Loader />
         <Alerts />
         <ScrollToTop />
         <Header />
         <Login />
+        <SignIn />
         <Videos />
         <Footer />
-      </AppDiv>
+      </main>
     </ConfigProvider>
   );
 }

@@ -1,12 +1,13 @@
-import { usePreferencesContext } from "@/hooks/usePreferencesContext";
-import styles from "./Footer.module.css";
+import { useLoginContext } from "@/hooks/useLoginContext";
+
+import styles from "./Footer.module.scss";
 
 const Footer = () => {
-    const { user } = usePreferencesContext();
+    const { user } = useLoginContext();
 
     return (
         <footer className={styles.footer}>
-            <h3 className={styles.text}>victorpantarotti • user: {user || "?"} • :)</h3>
+            <h3 className={styles.text}>victorpantarotti • user: {user?.username ?? "?"} • :)</h3>
         </footer>
     )
 };

@@ -3,7 +3,7 @@ import { VideosObject } from "@/contexts/VideosContext";
 import { useVideosContext } from "@/hooks/useVideosContext";
 import { FaArrowDown, FaArrowUp, FaClock, FaHeart, FaPlay, FaRegHeart, FaTrash } from "react-icons/fa";
 
-import styles from "./Video.module.css";
+import styles from "./Video.module.scss";
 
 interface VideoProps {
     video: VideosObject

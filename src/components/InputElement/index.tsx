@@ -1,25 +1,34 @@
-import { forwardRef, ReactElement, SetStateAction } from "react";
+import { ChangeEvent, forwardRef, ReactElement, SetStateAction } from "react";
 import { Input, InputRef } from "antd";
 
 interface InputElementProps {
+    type?: string,
     placeholder: string,
     prefix?: ReactElement | null,
-    onEnterPress: () => void,
+    status?: string,
+    onEnterPress?: () => void,
     inputState: string,
     setInputState: React.Dispatch<SetStateAction<string>>
 }
 
-const InputElement = forwardRef<InputRef, InputElementProps>(({ placeholder, prefix = null, onEnterPress, inputState, setInputState }, ref) => {
+const InputElement = forwardRef<InputRef, InputElementProps>(({ type = "text", placeholder, prefix = null, status, onEnterPress = () => {}, inputState, setInputState }, ref) => {
+    let obj = {
+        type: type,
+        placeholder: placeholder,
+        prefix: prefix,
+        value: inputState,
+        onChange: (e: ChangeEvent<HTMLInputElement>) => setInputState(e.target.value), 
+        onKeyDown: (e: any) => e.keyCode === 13 || e.keyCode === 108 ? onEnterPress() : "",
+        ref: ref,
+    }
+    
+    if (status) Object.assign(obj, {
+        status: status
+    });
+    
     return (
-        <Input
-            placeholder={placeholder} 
-            prefix={prefix}
-            value={inputState}
-            onChange={(e) => setInputState(e.target.value)} 
-            onKeyDown={(e) => e.keyCode === 13 || e.keyCode === 108 ? onEnterPress() : ""}
-            ref={ref}
-        />
-    )
+        <Input {...obj} />
+    );
 });
 
 InputElement.displayName = "InputElement";

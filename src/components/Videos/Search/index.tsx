@@ -5,13 +5,6 @@ import { Modal, Button, InputRef } from "antd";
 import { CgSearch } from "react-icons/cg";
 import InputElement from "@/components/InputElement";
 
-import styled from "styled-components";
-
-const Warning = styled.p`
-    margin-top: -10px;
-    font-size: 12px;
-`;
-
 const Search = () => {
     const { searchState, setSearchState, filter, setFilter } = useVideosContext();
     const [inputState, setInputState] = useState(filter.filter);
@@ -42,8 +35,8 @@ const Search = () => {
             footer={null}
             afterOpenChange={() => inputRef.current?.focus()}
         >
-            <Warning>Atalhos: {">"}: maior que; {"<"}: menor que.</Warning>
-            <Warning>Você pode utilizar estes atalhos ao mesmo tempo enquanto pesquisa pelo título e nome do canal! Não existe ordem específica para colocá-los! Ex: {`">10m jogos"`}</Warning>
+            <p className="-mt-[10px] text-xs">Atalhos: {">"}: maior que; {"<"}: menor que.</p>
+            <p className="-mt-[10px] text-xs">Você pode utilizar estes atalhos ao mesmo tempo enquanto pesquisa pelo título e nome do canal! Não existe ordem específica para colocá-los! Ex: {`">10m jogos"`}</p>
             <InputElement
                 placeholder="Digite sua pesquisa" 
                 prefix={<CgSearch />} 

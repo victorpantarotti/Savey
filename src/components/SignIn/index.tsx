@@ -7,33 +7,35 @@ import { MdOutlinePassword } from "react-icons/md";
 
 import InputElement from "../InputElement";
 
-const Login = () => {
-    const { loginModalState, setLoginModalState, setSignInModalState, loginUser } = useLoginContext();
+const SignIn = () => {
+    const { signInModalState, setLoginModalState, setSignInModalState, signInUser } = useLoginContext();
     const usernameRef = useRef<InputRef>(null);
     const [usernameState, setUsernameState] = useState("");
     const [pwdState, setPwdState] = useState("");
     const [errorState, setErrorState] = useState(false);
 
-    const loginAction = async () => {
+    const signInAction = async () => {
         if (!usernameState || !pwdState) return;
 
-        const action = await loginUser({
+        const action = await signInUser({
             username: usernameState,
             password: pwdState
         });
+
+        console.log(action.code);
 
         switch (action.code) {
             case 200:
                 setUsernameState("");
                 setPwdState("");
-                setLoginModalState({
+                setSignInModalState({
                     active: false,
                     closable: false
                 });
                 break;
 
-            case 401:
-            case 404:
+            case 409:
+            case 501:
                 setErrorState(true);
                 setTimeout(() => setErrorState(false), 3500);
                 break;                
@@ -41,23 +43,15 @@ const Login = () => {
             default:
                 break;
         }
+
     };
 
-    const handleCancel = () => {
-        if (loginModalState.closable) {
-            return setLoginModalState({
-                active: false,
-                closable: false
-            });
-        }
-    }
-
-    const showSignInModal = () => {
-        setLoginModalState({
+    const showLoginModal = () => {
+        setSignInModalState({
             active: false,
             closable: false
         });
-        return setSignInModalState({
+        return setLoginModalState({
             active: true,
             closable: false
         });
@@ -73,10 +67,9 @@ const Login = () => {
             }
         }}>
             <Modal 
-                title="Logue-se" 
-                open={loginModalState.active}
-                closable={loginModalState.closable}
-                onCancel={handleCancel}
+                title="Cadastre-se" 
+                open={signInModalState.active}
+                closable={false}
                 footer={null}
                 afterOpenChange={() => usernameRef.current?.focus()}
             >
@@ -94,18 +87,18 @@ const Login = () => {
                         placeholder="Digite sua senha"
                         prefix={<MdOutlinePassword />}
                         status={errorState ? "error" : ""}
-                        onEnterPress={loginAction}
+                        onEnterPress={signInAction}
                         inputState={pwdState}
                         setInputState={setPwdState}
                     />
                 </div>
                 <div className="flex gap-2 mt-2">
-                    <Button type="primary" onClick={loginAction}>Logar</Button>
-                    <Button type="primary" onClick={() => showSignInModal()}>Cadastrar-se</Button>
+                    <Button type="primary" onClick={() => signInAction()}>Cadastrar-se</Button>
+                    <Button type="primary" onClick={() => showLoginModal()}>Já tenho conta</Button>
                 </div>
             </Modal>
         </ConfigProvider>
     );
 };
 
-export default Login;
+export default SignIn;

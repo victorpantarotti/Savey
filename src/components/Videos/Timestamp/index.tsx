@@ -7,13 +7,6 @@ import { Modal, Button } from "antd";
 import InputElement from "@/components/InputElement";
 import { FaRegClock } from "react-icons/fa";
 
-import styled from "styled-components";
-
-const Warning = styled.p`
-    margin-top: -10px;
-    font-size: 12px;
-`;
-
 const Timestamp = () => {
     const { timestampState, setTimestampState, saveTimestamp } = useVideosContext();
     const [inputState, setInputState] = useState("");
@@ -46,7 +39,7 @@ const Timestamp = () => {
             onCancel={handleCancel}
             footer={null}
         >
-            <Warning>Coloque o tempo no formato correto. Ex: "1h55m45s", "16m35s", "35s"</Warning>
+            <p className="-mt-[10px] text-xs">Coloque o tempo no formato correto. Ex: "1h55m45s", "16m35s", "35s"</p>
             <InputElement 
                 placeholder="Digite o tempo" 
                 prefix={<FaRegClock />} 

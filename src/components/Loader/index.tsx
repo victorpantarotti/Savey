@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/hooks/useGlobalContext";
 
-import styles from "./Loader.module.css";
+import styles from "./Loader.module.scss";
 import styled from "styled-components";
 
 const LoaderDiv = styled.div`

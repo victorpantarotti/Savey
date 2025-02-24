@@ -46,7 +46,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
                 active: true,
                 closable: false
             }) 
-            : !user 
+            : !user
                 ? setUser(localUser)
                 : "" 
     }, [user]);

@@ -93,15 +93,15 @@ function App() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey) {
-        e.preventDefault();
-
         switch (e.code) {
           case "Space":
-          case "KeyQ":
+            case "KeyQ":
+            e.preventDefault();
             setAddVideoState((state) => !state);
             break;
             
-          case "KeyK":
+            case "KeyK":
+            e.preventDefault();
             setSearchState((state) => !state);
             break;
 

@@ -35,7 +35,7 @@ const AddVideo = () => {
             footer={null}
             afterOpenChange={() => inputRef.current?.focus()}
         >
-            {isBrowser && <p className="-mt-[10px] text-xs">Você também pode acessar essa tela usando: CTRL + Espaço!</p>}
+            {isBrowser && <p className="-mt-[10px] text-xs">Você também pode acessar essa tela usando: CTRL + Espaço ou CTRL + Q!</p>}
             <InputElement
                 placeholder="Insira uma URL" 
                 prefix={<CgMathPlus />} 

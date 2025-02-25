@@ -76,12 +76,14 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const [isVideosLoaded, setIsVideosLoaded] = useState(false);
 
     const getVideos = () => get(ref(db, user?.uuid)).then(async (snap) => {
-        if (snap.exists() && snap.val().videos) {
-            const array = snap.val().videos;
-            const sortedArray = array.sort((a: VideosObject, b: VideosObject) => a.order - b.order);
-            
-            setIsVideosLoaded(true);
-            return setVideos(sortedArray);
+        if (await snap.exists()) {
+            if (await snap.val().videos) {
+                const array = await snap.val().videos;
+                const sortedArray = array.sort((a: VideosObject, b: VideosObject) => a.order - b.order);
+                
+                setIsVideosLoaded(true);
+                return setVideos(sortedArray);
+            }
         }
         setIsVideosLoaded(true);
         return setVideos([]);

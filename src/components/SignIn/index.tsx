@@ -22,8 +22,6 @@ const SignIn = () => {
             password: pwdState
         });
 
-        console.log(action.code);
-
         switch (action.code) {
             case 200:
                 setUsernameState("");

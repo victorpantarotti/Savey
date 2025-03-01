@@ -75,19 +75,22 @@ export const VideosProvider = ({ children }: VideosProviderProps) => {
     const [addVideoState, setAddVideoState] = useState(false);
     const [isVideosLoaded, setIsVideosLoaded] = useState(false);
 
-    const getVideos = () => get(ref(db, user?.uuid)).then(async (snap) => {
-        if (snap.exists()) {
-            const videos = await snap.val().videos
-            if (videos) {
+    const getVideos = async () => {
+        if (!user?.uuid) return;
+    
+        try {
+            const snap = await get(ref(db, user.uuid));
+            if (snap.exists() && snap.val().videos) {
+                const videos = snap.val().videos;
                 const sortedArray = videos.sort((a: VideosObject, b: VideosObject) => a.order - b.order);
-                
-                setIsVideosLoaded(true);
-                return setVideos(sortedArray);
+                setVideos(sortedArray);
             }
+        } catch (error) {
+            console.error("Erro ao buscar vídeos:", error);
+        } finally {
+            setIsVideosLoaded(true);
         }
-        setIsVideosLoaded(true);
-        return setVideos([]);
-    });
+    };    
 
     useEffect(() => {
         showLoading("show");

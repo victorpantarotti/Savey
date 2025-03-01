@@ -9,14 +9,16 @@ import { get, getDatabase, ref, set } from "firebase/database";
 import { VideosObject } from "@/contexts/VideosContext";
 
 import { delUserStorage, setUserStorage } from "@/utils/login";
-import { decrypt, encrypt } from "@/utils/encryption";
+import { encryptObject, decryptObject, IEncryptedData } from "@/utils/encryption";
 
 interface UserLoginObject {
     username: string,
     password: string
 }
 
-interface UserObject extends UserLoginObject {
+interface UserObject {
+    username: string,
+    password: IEncryptedData
     videos: VideosObject[]
 }
 
@@ -54,18 +56,29 @@ export const useLoginContext = () => {
     }
 
     const loginUser = async (user: UserLoginObject): Promise<AuthResponses> => {
-        const userData = await findUser(user.username.toLowerCase());
-
-        if (userData.uuid) {
-            if (await decrypt(userData.data?.password!) === user.password) {
-                setUserStorage({ username: userData.data?.username!, uuid: userData.uuid });
-                setUser({ username: userData.data?.username!, uuid: userData.uuid });
-                return { code: 200 };
+        try {
+            const userData = await findUser(user.username.toLowerCase());
+    
+            if (!userData?.uuid) return { code: 404 };
+    
+            try {
+                const { password } = await decryptObject(userData.data?.password!);
+    
+                if (password === user.password) {
+                    setUserStorage({ username: userData.data?.username!, uuid: userData.uuid! });
+                    setUser({ username: userData.data?.username!, uuid: userData.uuid! });
+                    return { code: 200 };
+                }
+                
+                return { code: 401 };
+            } catch (err) {
+                console.error("[loginUser][decryptObject]:", err);
+                return { code: 401 };
             }
-            return { code: 401 };
+        } catch (err) {
+            return { code: 404 };
         }
-        return { code: 404 };
-    };
+    };    
 
     const signInUser = async (user: UserLoginObject): Promise<AuthResponses> => {
         const userSearch = await findUser(user.username);
@@ -75,7 +88,7 @@ export const useLoginContext = () => {
         const newUserUUID = uuidv4();
         let newUser: UserObject = {
             username: user.username.toLowerCase(),
-            password: await encrypt(user.password),
+            password: await encryptObject({ password: user.password }),
             videos: []
         }
 

@@ -1,5 +1,5 @@
 import { createContext, ReactElement, SetStateAction, useEffect, useState } from "react";
-import { updateUserStorage } from "@/utils/login";
+import { getUserStorage } from "@/utils/login";
 
 interface LoginContextInterface {
     user: UserData | null,
@@ -39,19 +39,25 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
     });
 
     useEffect(() => {
-        updateUserStorage().then((localUser) => {
-            if (!localUser && user === null) {
-                setLoginModalState({
-                    active: true,
-                    closable: false
-                });
-            } else if (user === null) {
-                setUser(localUser);
+        const loadUser = async () => {
+            try {
+                const localUser = await getUserStorage();
+    
+                if (!localUser && user === null) {
+                    setLoginModalState({
+                        active: true,
+                        closable: false
+                    });
+                } else if (user === null) {
+                    setUser(localUser);
+                }
+            } catch (error) {
+                console.error("Error loading user data:", error);
             }
-        }).catch(error => {
-            console.error("Error loading user data:", error);
-        });
-    }, [user]);    
+        };
+    
+        loadUser();
+    }, [user]);      
 
     return (
         <LoginContext.Provider value={{ user, setUser, loginModalState, setLoginModalState, signInModalState, setSignInModalState }}>

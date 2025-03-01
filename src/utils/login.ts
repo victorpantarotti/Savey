@@ -1,31 +1,23 @@
 import { UserData } from "@/contexts/LoginContext";
-import { decrypt, encrypt } from "./encryption";
+import { decryptObject, encryptObject } from "./encryption";
 
-export const updateUserStorage = async (): Promise<any | null> => {
-    const data = localStorage.getItem("user__data");
+export const getUserStorage = async (): Promise<UserData | null> => {
+    const encryptedData = localStorage.getItem("user__data");
 
-    if (data) {
-        try {
-            const decryptedData = await decrypt(data);
-            if (decryptedData) {
-                return JSON.parse(decryptedData);
-            } else {
-                console.error("[updateUserStorage]: Decryption failed, empty result.");
-                return null;
-            }
-        } catch (error) {
-            console.error("[updateUserStorage]: Error decrypting data:", error);
-            return null;
-        }
-    } else {
-        console.error("[updateUserStorage]: No data found in localStorage.");
+    if (!encryptedData) {
+        return null;
+    }
+
+    try {
+        return await decryptObject(JSON.parse(encryptedData));
+    } catch (err) {
         return null;
     }
 };
 
 export const setUserStorage = async (user: UserData) => {
-    encrypt(JSON.stringify(user)).then((encryptedData) => {
-        localStorage.setItem("user__data", encryptedData);
-    });
+    const encryptedData = await encryptObject(user);
+    localStorage.setItem("user__data", JSON.stringify(encryptedData));
 };
+
 export const delUserStorage = () => localStorage.removeItem("user__data");

@@ -57,7 +57,7 @@ export const useLoginContext = () => {
         const userData = await findUser(user.username.toLowerCase());
 
         if (userData.uuid) {
-            if (decrypt(userData.data?.password!) === user.password) {
+            if (await decrypt(userData.data?.password!) === user.password) {
                 setUserStorage({ username: userData.data?.username!, uuid: userData.uuid });
                 setUser({ username: userData.data?.username!, uuid: userData.uuid });
                 return { code: 200 };
@@ -75,7 +75,7 @@ export const useLoginContext = () => {
         const newUserUUID = uuidv4();
         let newUser: UserObject = {
             username: user.username.toLowerCase(),
-            password: encrypt(user.password),
+            password: await encrypt(user.password),
             videos: []
         }
 

@@ -1,6 +1,50 @@
-import CryptoJS from "crypto-js";
+const SECRET_KEY = import.meta.env.VITE_ENCRYPTION_SECRET;
 
-const { VITE_ENCRYPTION_SECRET } = import.meta.env;
+async function getKey(): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const keyHash = await crypto.subtle.digest("SHA-256", encoder.encode(SECRET_KEY)); // Hash to 256 bits
+  
+  return crypto.subtle.importKey(
+    "raw",
+    keyHash,
+    { name: "AES-GCM" },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
 
-export const encrypt = (data: string) => CryptoJS.AES.encrypt(data, VITE_ENCRYPTION_SECRET, { mode: CryptoJS.mode.ECB }).toString();
-export const decrypt = (data: string) => CryptoJS.AES.decrypt(data, VITE_ENCRYPTION_SECRET, { mode: CryptoJS.mode.ECB }).toString(CryptoJS.enc.Utf8);
+const IV_LENGTH = 12;
+
+export async function encrypt(text: string): Promise<string> {
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+  const key = await getKey();
+  const encrypted = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv },
+    key,
+    new TextEncoder().encode(text)
+  );
+
+  return btoa(
+    String.fromCharCode(...iv) + String.fromCharCode(...new Uint8Array(encrypted))
+  );
+}
+
+export async function decrypt(encryptedText: string): Promise<string> {
+  try {
+    const binaryData = atob(encryptedText);
+    const iv = new Uint8Array(binaryData.slice(0, IV_LENGTH).split("").map(c => c.charCodeAt(0)));
+    const encryptedData = new Uint8Array(binaryData.slice(IV_LENGTH).split("").map(c => c.charCodeAt(0)));
+
+    const key = await getKey();
+    const decrypted = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv },
+      key,
+      encryptedData
+    );
+
+    return new TextDecoder().decode(decrypted);
+  } catch (error) {
+    // console.error("Decryption failed:", error);
+    return "";
+  }
+}

@@ -44,7 +44,7 @@ export async function decrypt(encryptedText: string): Promise<string> {
 
     return new TextDecoder().decode(decrypted);
   } catch (error) {
-    // console.error("Decryption failed:", error);
+    console.error("Decryption failed:", error);
     return "";
   }
 }

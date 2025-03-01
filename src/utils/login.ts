@@ -10,15 +10,15 @@ export const updateUserStorage = async (): Promise<any | null> => {
             if (decryptedData) {
                 return JSON.parse(decryptedData);
             } else {
-                // console.error("[updateUserStorage]: Decryption failed, empty result.");
+                console.error("[updateUserStorage]: Decryption failed, empty result.");
                 return null;
             }
         } catch (error) {
-            // console.error("[updateUserStorage]: Error decrypting data:", error);
+            console.error("[updateUserStorage]: Error decrypting data:", error);
             return null;
         }
     } else {
-        // console.error("[updateUserStorage]: No data found in localStorage.");
+        console.error("[updateUserStorage]: No data found in localStorage.");
         return null;
     }
 };

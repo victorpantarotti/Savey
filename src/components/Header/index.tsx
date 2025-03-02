@@ -2,7 +2,7 @@ import type { MenuProps } from 'antd';
 import { Space, Dropdown } from "antd";
 import { CgMenu, CgMathPlus, CgSun, CgMoon, CgSearch } from "react-icons/cg";
 import { FaHeart, FaRegHeart } from 'react-icons/fa6';
-import { MdLogout } from 'react-icons/md';
+import { MdLogout, MdOutlineKey } from 'react-icons/md';
 import DropdownButton from './DropdownButton';
 
 import { usePreferencesContext } from '@/hooks/usePreferencesContext';
@@ -13,7 +13,7 @@ import styles from "./Header.module.scss";
 
 const Header = () => {
   const { theme, changeTheme } = usePreferencesContext();
-  const { signOutUser } = useLoginContext();
+  const { signOutUser, changePwdModalState, setChangePwdModalState } = useLoginContext();
   const { favoriteListState, setFavoriteListState, searchState, setSearchState, addVideoState, setAddVideoState } = useVideosContext();
 
   const items: MenuProps['items'] = [
@@ -39,6 +39,12 @@ const Header = () => {
       key: 'change-theme',
       label: (
         <DropdownButton icon={ theme === "dark" ? <CgSun /> : <CgMoon /> } text="Mudar Tema" onClick={changeTheme} />
+      ),
+    },
+    {
+      key: 'user-changepwd',
+      label: (
+        <DropdownButton icon={<MdOutlineKey />} text="Trocar Senha" onClick={() => setChangePwdModalState({ active: !changePwdModalState.active, closable: true })} />
       ),
     },
     {

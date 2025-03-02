@@ -22,6 +22,7 @@ import Login from './components/Login';
 import SignIn from './components/SignIn';
 import Videos from './components/Videos';
 import Footer from './components/Footer';
+import UserInfo from './components/UserInfo';
 
 const AntDTheme = {
   token: {
@@ -127,6 +128,7 @@ function App() {
         <Header />
         <Login />
         <SignIn />
+        <UserInfo />
         <Videos />
         <Footer />
       </main>

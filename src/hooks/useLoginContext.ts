@@ -4,7 +4,7 @@ import { LoginContext } from "@/contexts/LoginContext";
 import { v4 as uuidv4 } from "uuid";
 
 import firebaseConfig from "@/utils/initDatabase";
-import { get, getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set, update } from "firebase/database";
 
 import { VideosObject } from "@/contexts/VideosContext";
 
@@ -39,7 +39,7 @@ interface AuthResponses {
 */
 
 export const useLoginContext = () => {
-    const { user, setUser, loginModalState, setLoginModalState, signInModalState, setSignInModalState } = useContext(LoginContext);
+    const { user, setUser, loginModalState, setLoginModalState, signInModalState, setSignInModalState, changePwdModalState, setChangePwdModalState } = useContext(LoginContext);
     const db = getDatabase(firebaseConfig);
 
     const findUser = async (username: string): Promise<FindUserResponse> => {
@@ -109,14 +109,45 @@ export const useLoginContext = () => {
         setUser(null);
     }
 
+    const changeUserPassword = async (oldPassword: string, newPassword: string) => {
+        try {
+            const userData = await findUser(user?.username!);
+    
+            if (!userData) return { code: 401 };
+    
+            try {
+                const storedPassword = await decryptObject(userData.data?.password!);
+
+                if (storedPassword.password !== oldPassword || storedPassword.password === newPassword) return { code: 401 };
+    
+                try {
+                    await update(ref(db, userData.uuid!), {
+                        password: await encryptObject({ password: newPassword })
+                    });
+    
+                    return { code: 200 };
+                } catch (err) {
+                    return { code: 401 };
+                }
+            } catch (err) {
+                return { code: 401 };
+            }
+        } catch (err) {
+            return { code: 401 };
+        }
+    };    
+
     return {
         user,
         loginModalState,
         setLoginModalState,
         signInModalState,
         setSignInModalState,
+        changePwdModalState,
+        setChangePwdModalState,
         loginUser,
         signInUser,
-        signOutUser
+        signOutUser,
+        changeUserPassword
     }
 }

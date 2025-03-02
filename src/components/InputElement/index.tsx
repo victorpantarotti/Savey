@@ -13,7 +13,6 @@ interface InputElementProps {
 
 const InputElement = forwardRef<InputRef, InputElementProps>(({ type = "text", placeholder, prefix = null, status, onEnterPress = () => {}, inputState, setInputState }, ref) => {
     let obj = {
-        type: type,
         placeholder: placeholder,
         prefix: prefix,
         value: inputState,
@@ -26,9 +25,9 @@ const InputElement = forwardRef<InputRef, InputElementProps>(({ type = "text", p
         status: status
     });
     
-    return (
-        <Input {...obj} />
-    );
+    return type === "password"
+        ? <Input.Password {...obj} />
+        : <Input type={type} {...obj} />;
 });
 
 InputElement.displayName = "InputElement";

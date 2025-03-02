@@ -4,17 +4,19 @@ import { getUserStorage } from "@/utils/login";
 interface LoginContextInterface {
     user: UserData | null,
     setUser: React.Dispatch<SetStateAction<UserData | null>>,
-    loginModalState: IloginModalState,
-    setLoginModalState: React.Dispatch<SetStateAction<IloginModalState>>,
-    signInModalState: IloginModalState,
-    setSignInModalState: React.Dispatch<SetStateAction<IloginModalState>>
+    loginModalState: IModalState,
+    setLoginModalState: React.Dispatch<SetStateAction<IModalState>>,
+    signInModalState: IModalState,
+    setSignInModalState: React.Dispatch<SetStateAction<IModalState>>,
+    changePwdModalState: IModalState,
+    setChangePwdModalState: React.Dispatch<SetStateAction<IModalState>>
 }
 
 interface LoginProviderProps {
     children: ReactElement
 }
 
-interface IloginModalState {
+interface IModalState {
     active: boolean,
     closable: boolean
 }
@@ -29,13 +31,17 @@ LoginContext.displayName = "Login";
 
 export const LoginProvider = ({ children }: LoginProviderProps) => {
     const [user, setUser] = useState<UserData | null>(null);
-    const [loginModalState, setLoginModalState] = useState<IloginModalState>({
+    const [loginModalState, setLoginModalState] = useState<IModalState>({
         active: false,
         closable: false
     });
-    const [signInModalState, setSignInModalState] = useState<IloginModalState>({
+    const [signInModalState, setSignInModalState] = useState<IModalState>({
         active: false,
         closable: false
+    });
+    const [changePwdModalState, setChangePwdModalState] = useState<IModalState>({
+        active: false,
+        closable: true
     });
 
     useEffect(() => {
@@ -60,7 +66,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
     }, [user]);      
 
     return (
-        <LoginContext.Provider value={{ user, setUser, loginModalState, setLoginModalState, signInModalState, setSignInModalState }}>
+        <LoginContext.Provider value={{ user, setUser, loginModalState, setLoginModalState, signInModalState, setSignInModalState, changePwdModalState, setChangePwdModalState }}>
             {children}
         </LoginContext.Provider>
     );
